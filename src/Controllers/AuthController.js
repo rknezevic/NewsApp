@@ -54,7 +54,7 @@ const register = async (req, res) => {
         );
 
         res.status(200).json({
-            message: 'Login successfull.',
+            message: 'Login successfull',
             token
         });
 

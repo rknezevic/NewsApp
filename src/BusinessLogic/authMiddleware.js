@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 
 const authMiddleware = (req, res, next) => {
   const authHeader = req.headers.authorization;
-
+  console.log(authHeader);
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
     return res.status(401).json({ error: 'Access denied : token not found' });
   }
@@ -20,6 +20,7 @@ const authMiddleware = (req, res, next) => {
 
 const permissionCheck = (...allowedRoles) => {
     return (req, res, next) => {
+      console.log(req.user.role);
       if (!req.user || !allowedRoles.includes(req.user.role)) {
         return res.status(403).json({ error: 'Access denied' });
       }
