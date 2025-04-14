@@ -1,4 +1,4 @@
-const Message = {
+export const Message = {
     AUTH: {
         ACCESS_DENIED : "Access denied: token not found.",
         INVALID_TOKEN : "Token is invalid or expired.",
@@ -26,7 +26,6 @@ const Message = {
     DB: {
         CONNECTION_ERROR : "Connection error.",
         CONNECTED : "Successfully connected to database!",
-    }
-}
+    },
+} as const;
 
-module.exports = Message;
