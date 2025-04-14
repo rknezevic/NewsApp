@@ -1,4 +1,5 @@
 const NewsPost = require('../Model/NewsPost');
+const messages = require('../Utilities/Message')
 
 const createNewsPost = async (req, res) => {
   const { headline, shortDescription, fullDescription, image, category, isBreaking } = req.body;
@@ -10,7 +11,7 @@ const createNewsPost = async (req, res) => {
         breakingCreatedAt: { $gte: new Date(Date.now() - 48 * 60 * 60 * 1000) }
       });
       if (activeBreakingNews) {
-        return res.status(400).json({ error: 'There is already an active BREAKING NEWS.' });
+        return res.status(400).json({ error: messages.NEWS.BREAKING_EXISTS });
       }
     }
 
@@ -27,11 +28,11 @@ const createNewsPost = async (req, res) => {
     });
 
     await newsPost.save();
-    res.status(201).json({ message: "Post created successfully!", newsPost});
+    res.status(201).json({ message: messages.NEWS.CREATED, newsPost});
 
   } catch (err) {
     console.error('Error saving news post:', err);
-    res.status(500).json({ error: 'Error creating a new post.', details: err.message })  }
+    res.status(500).json({ error: messages.NEWS.CREATION_FAILED })  }
 };
 
 module.exports = { createNewsPost }

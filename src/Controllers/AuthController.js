@@ -1,19 +1,19 @@
 const User = require('../Model/User');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-require('dotenv').config();
+const messages = require('../Utilities/Message');
 
 const register = async (req, res) => {
     const { name, email, password, alias, role } = req.body;
   
     try {
       const existingUser = await User.findOne({ email });
-      if (existingUser) return res.status(400).json({ error: 'User with this email already exists.' });
+      if (existingUser) return res.status(400).json({ error: messages.AUTH.EMAIL_EXISTS});
   
       const hashPassword = await bcrypt.hash(password, 10);
   
       const newUser = new User({
-        role: role || ['guest'],
+        role: role || 'guest',
         name,
         email,
         password: hashPassword,
@@ -22,10 +22,10 @@ const register = async (req, res) => {
     
       await newUser.save();
   
-      res.status(201).json({ message: 'User successfully registered.' });
+      res.status(201).json({ message: messages.USER.CREATED });
     } catch (error) {
       console.error(error); 
-      res.status(500).json({ error: 'Registration failure' });
+      res.status(500).json({ error: messages.USER.REG_FAILED});
     }
   };
   
@@ -37,14 +37,14 @@ const register = async (req, res) => {
 
         if (!user) {
             return res.status(400).json({
-                error: "User email is not found. Invalid login credentials.",
+                error: messages.AUTH.LOGIN_FAILED,
             });
         }
 
         const isMatch = await bcrypt.compare(password, user.password);
 
         if (!isMatch) {
-            return res.status(401).json({ error: 'Password is incorrect' });
+            return res.status(401).json({ error: messages.AUTH.LOGIN_FAILED });
         }
 
         const token = jwt.sign(
@@ -54,14 +54,14 @@ const register = async (req, res) => {
         );
 
         res.status(200).json({
-            message: 'Login successfull',
+            message: messages.USER.LOGGED_IN,
             token
         });
 
     } catch (error) {
         console.error("Login error:", error);
         res.status(500).json({
-            error: "Login failure."
+            error: messages.AUTH.LOGIN_FAILED
         });
     }
 };

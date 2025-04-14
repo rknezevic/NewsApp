@@ -1,9 +1,8 @@
 const express = require('express');
-const connectDb = require('./DatabaseLogic/dbConfig');
-require('dotenv').config();
+const connectDb = require('./src/DatabaseLogic/dbConfig');
 
-const authRoutes = require('./Routes/auth');
-const newsPostRoute = require('./Routes/newsPostRoute');
+const authRoutes = require('./src/Routes/auth');
+const newsPostRoute = require('./src/Routes/newsPostRoute');
 
 const app = express()
 app.use(express.json());
