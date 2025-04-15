@@ -3,7 +3,6 @@ import { Message } from '../Utilities/Message';
 
 const connectDb = async (): Promise<void> => {
   try {
-    console.log(process.env.MONGO_URI);
     await mongoose.connect(process.env.MONGO_URI as string);
     console.log(Message.DB.CONNECTED);
   } catch (err) {

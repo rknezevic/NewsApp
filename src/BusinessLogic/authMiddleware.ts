@@ -8,7 +8,7 @@ import { AuthenticatedRequest } from '../Types/AuthenticatedRequest';
 export const authMiddleware = (req: AuthenticatedRequest, res: Response, next: NextFunction): void => {
   const authHeader = req.headers.authorization;
 
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+  if (!authHeader?.startsWith('Bearer ')) {
     res.status(401).json({ error: Message.AUTH.INVALID_TOKEN });
     return;
   }

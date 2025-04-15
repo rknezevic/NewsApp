@@ -1,0 +1,30 @@
+export const AppConstants = {
+    HttpStatusCodes: {
+      OK: 200,
+      CREATED: 201,
+      NO_CONTENT: 204,
+      BAD_REQUEST: 400,
+      UNAUTHORIZED: 401,
+      FORBIDDEN: 403,
+      NOT_FOUND: 404,
+      CONFLICT: 409,
+      INTERNAL_SERVER_ERROR: 500,
+      SERVICE_UNAVAILABLE: 503,
+    },
+    SuccessTypes: {
+      OK: 'OK',
+      CREATED: 'CREATED'
+    },
+    ErrorTypes: {
+      BAD_REQUEST: 'BAD_REQUEST',
+      UNAUTHORIZED: 'UNAUTHORIZED',
+      FORBIDDEN: 'FORBIDDEN',
+      NOT_FOUND: 'NOT_FOUND',
+      CONFLICT: 'CONFLICT',
+      INTERNAL_SERVER_ERROR: 'INTERNAL_SERVER_ERROR',
+      VALIDATION_ERROR: 'VALIDATION_ERROR',
+      DATABASE_ERROR: 'DATABASE_ERROR',
+      AUTH_ERROR: 'AUTH_ERROR',
+      UNKNOWN_ERROR: 'UNKNOWN_ERROR',
+    }
+}

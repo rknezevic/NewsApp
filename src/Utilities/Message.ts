@@ -19,6 +19,8 @@ export const Message = {
         CREATED : "News post created successfully.",
         BREAKING_EXISTS : "There is alreadz an active BREAKING NEWS.",
         CREATION_FAILED : "Error creating a new post.",
+        FAIL : "Your request couldn't be done. Please try again!",
+        SUCCESS: "Your request has been processed successfully!"
     },
     GENERAL: {
         SERVER_ERROR : "Something went wrong. Please try again.",
@@ -27,5 +29,5 @@ export const Message = {
         CONNECTION_ERROR : "Connection error.",
         CONNECTED : "Successfully connected to database!",
     },
-} as const;
+};
 

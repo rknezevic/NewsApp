@@ -2,20 +2,21 @@ import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import User from '../Model/User';
-import { IUser } from '../Types/IUser';
 import { IRegisterBody } from '../Types/IRegisterBody';
 import { ILoginBody } from '../Types/ILoginBody';
 import { Message } from '../Utilities/Message';
+import * as UserRepository from '../Repository/UserRepository';
 import process from 'process';
+import { BadRequestError } from '../ResponseHandle/BadRequestError';
+import { AuthorizationError } from '../ResponseHandle/AuthorizationError';
 
 export const register = async (req: Request<{}, {}, IRegisterBody>, res: Response): Promise<void> => {
   const { name, email, password, alias, role } = req.body;
 
   try {
-    const existingUser = await User.findOne({ email });
+    const existingUser = await UserRepository.findUserByEmail(email);
     if (existingUser) {
-      res.status(400).json({ error: Message.AUTH.EMAIL_EXISTS });
-      return;
+      throw new BadRequestError(Message.AUTH.EMAIL_EXISTS);
     }
 
     const hashPassword = await bcrypt.hash(password, 10);
@@ -28,12 +29,16 @@ export const register = async (req: Request<{}, {}, IRegisterBody>, res: Respons
       alias,
     });
 
-    await newUser.save();
+    const savedUser = await UserRepository.createUser(newUser);
 
-    res.status(201).json({ message: Message.USER.CREATED });
+    if (savedUser && savedUser._id) {
+      res.status(201).json({ message: Message.USER.CREATED });
+    } else {
+      throw new BadRequestError(Message.USER.REG_FAILED)
+    }
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: Message.USER.REG_FAILED });
+      throw new BadRequestError(Message.USER.REG_FAILED)
   }
 };
 
@@ -41,16 +46,14 @@ export const login = async (req: Request<{}, {}, ILoginBody>, res: Response): Pr
   const { email, password } = req.body;
 
   try {
-    const user = await User.findOne({ email });
+    const user = await UserRepository.findUserByEmail(email);
     if (!user) {
-      res.status(400).json({ error: Message.AUTH.LOGIN_FAILED });
-      return;
+      throw new BadRequestError(Message.AUTH.LOGIN_FAILED);
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      res.status(401).json({ error: Message.AUTH.LOGIN_FAILED });
-      return;
+      throw new BadRequestError(Message.AUTH.LOGIN_FAILED)
     }
 
     const token = jwt.sign(
@@ -59,12 +62,9 @@ export const login = async (req: Request<{}, {}, ILoginBody>, res: Response): Pr
       { expiresIn: '2h' }
     );
 
-    res.status(200).json({
-      message: Message.USER.LOGGED_IN,
-      token
-    });
+    res.status(200).json({token});
   } catch (error) {
     console.error('Login error:', error);
-    res.status(500).json({ error: Message.AUTH.LOGIN_FAILED });
+    throw new BadRequestError(Message.GENERAL.SERVER_ERROR);
   }
 };

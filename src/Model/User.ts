@@ -1,11 +1,12 @@
 import mongoose, { Schema } from 'mongoose';
 import { IUser } from '../Types/IUser';
+import { IUserRole } from '../Types/IUserRole';
 
 const userSchema: Schema<IUser> = new mongoose.Schema(
   {
     role: {
       type: String,
-      enum: ['admin', 'editor', 'guest'],
+      enum: IUserRole,
       default: 'guest'
     },
     name: {

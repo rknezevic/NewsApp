@@ -1,19 +1,6 @@
 import mongoose, { Document, Schema, Types } from 'mongoose';
-
-export interface INewsPost extends Document {
-  headline: string;
-  shortDescription: string;
-  fullDescription: string;
-  image: string;
-  category: 'worldwide' | 'local' | 'sport' | 'economy' | 'entertainment';
-  isBreaking: boolean;
-  breakingExpiresAt?: Date | null;
-  createdBy: Types.ObjectId;
-  lastEditedBy?: Types.ObjectId;
-  createdAt?: Date;
-  updatedAt?: Date;
-}
-
+import { INewsPost } from '../Types/INewsPost';
+import { ICategory } from '../Types/ICategory';
 const newsPostSchema: Schema<INewsPost> = new Schema(
   {
     headline: {
@@ -35,7 +22,7 @@ const newsPostSchema: Schema<INewsPost> = new Schema(
     },
     category: {
       type: String,
-      enum: ['worldwide', 'local', 'sport', 'economy', 'entertainment'],
+      enum: ICategory,
       required: true,
     },
     isBreaking: {
