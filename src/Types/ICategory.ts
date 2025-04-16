@@ -3,5 +3,6 @@ export enum ICategory {
     Local = 'local', 
     Sport = 'sport',
     Economy = 'economy',
-    Entertainment = 'entertainment'
+    Entertainment = 'entertainment',
+    Weather = 'weather'
 }

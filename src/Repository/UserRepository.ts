@@ -1,5 +1,5 @@
 import User from "../Model/User"
-import { IUser } from "../Types/IUser";
+import { IUser } from "../Model/User";
 
 export const findUserByEmail = async (email: string) => {
     return await User.findOne({ email });

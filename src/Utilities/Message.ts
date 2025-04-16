@@ -17,7 +17,7 @@ export const Message = {
     },
     NEWS : {
         CREATED : "News post created successfully.",
-        BREAKING_EXISTS : "There is alreadz an active BREAKING NEWS.",
+        BREAKING_EXISTS : "There is already an active BREAKING NEWS.",
         CREATION_FAILED : "Error creating a new post.",
         FAIL : "Your request couldn't be done. Please try again!",
         SUCCESS: "Your request has been processed successfully!"

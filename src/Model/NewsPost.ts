@@ -1,6 +1,20 @@
 import mongoose, { Document, Schema, Types } from 'mongoose';
-import { INewsPost } from '../Types/INewsPost';
 import { ICategory } from '../Types/ICategory';
+
+export interface INewsPost extends Document {
+  headline: string;
+  shortDescription: string;
+  fullDescription: string;
+  image: string;
+  category: 'worldwide' | 'local' | 'sport' | 'economy' | 'entertainment';
+  isBreaking: boolean;
+  breakingExpiresAt?: Date | null;
+  createdBy: Types.ObjectId;
+  lastEditedBy?: Types.ObjectId;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
 const newsPostSchema: Schema<INewsPost> = new Schema(
   {
     headline: {

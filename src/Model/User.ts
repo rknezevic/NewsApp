@@ -1,6 +1,16 @@
-import mongoose, { Schema } from 'mongoose';
-import { IUser } from '../Types/IUser';
+import mongoose, { Schema, Document } from 'mongoose';
 import { IUserRole } from '../Types/IUserRole';
+
+export interface IUser extends Document {
+    role: 'admin' | 'editor' | 'guest';
+    name: string;
+    email: string;
+    password: string;
+    alias: string;
+    createdAt?: Date;
+    updatedAt?: Date;
+  }
+  
 
 const userSchema: Schema<IUser> = new mongoose.Schema(
   {

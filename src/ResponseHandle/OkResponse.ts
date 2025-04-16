@@ -1,8 +1,9 @@
-import { AppConstants } from "../Utilities/AppConstants";
-import { BaseError } from "./BaseError";
+import { Response } from 'express';
 
-export class OkResponse extends BaseError{
-    constructor(message: string){
-        super(AppConstants.HttpStatusCodes.OK, AppConstants.SuccessTypes.OK, message)
-    }
-}
+export const okResponse = (res: Response, message: string, data?: any) =>{
+    return res.status(200).json({
+        status: 'success',
+        message,
+        ...(data && {data}),
+    });
+};

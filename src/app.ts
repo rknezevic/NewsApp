@@ -1,7 +1,7 @@
 import express, { Application } from 'express';
 import connectDb from './DatabaseLogic/dbConfig';
 import dotenv from 'dotenv';
-
+import { errorHandler } from './BusinessLogic/ErrorHandler';
 import authRoutes from './Routes/auth';
 import newsPostRoute from './Routes/newsPostRoute';
 dotenv.config();
@@ -13,6 +13,7 @@ app.use(express.json());
 app.use('/api/auth', authRoutes);
 app.use('/api/news-post', newsPostRoute);
 
+app.use(errorHandler)
 connectDb();
 
 const PORT = process.env.PORT || 5000;
