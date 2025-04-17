@@ -1,8 +1,8 @@
-import { AppConstants } from "../Utilities/AppConstants"
+import { ResponseConstants } from "../Utilities/Constants/ResponseConstants"
 import { BaseError } from "./BaseError"
 
 export class AuthorizationError extends BaseError {
     constructor(message : string){
-        super(AppConstants.HttpStatusCodes.UNAUTHORIZED, AppConstants.ErrorTypes.UNAUTHORIZED, message)
+        super(ResponseConstants.HttpStatusCodes.UNAUTHORIZED, ResponseConstants.ErrorTypes.UNAUTHORIZED, message)
     }
 }

@@ -1,4 +1,4 @@
-export const AppConstants = {
+export const ResponseConstants = {
     HttpStatusCodes: {
       OK: 200,
       CREATED: 201,

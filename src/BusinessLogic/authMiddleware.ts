@@ -5,7 +5,7 @@ import { JwtPayload } from '../Types/JwtPayload'
 import { AuthenticatedRequest } from '../Types/AuthenticatedRequest';
 import { BadRequestError } from '../ResponseHandle/BadRequestError';
 import { AuthorizationError } from '../ResponseHandle/AuthorizationError';
-
+import { config } from '../config/config'
 
 export const authMiddleware = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
   const authHeader = req.headers.authorization;
@@ -17,7 +17,7 @@ export const authMiddleware = (req: AuthenticatedRequest, res: Response, next: N
   const token = authHeader.split(' ')[1];
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
+    const decoded = jwt.verify(token, config.jwtSecret!) as JwtPayload;
     req.user = decoded;
     next();
   } catch (error) {

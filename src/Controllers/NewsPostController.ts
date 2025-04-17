@@ -3,9 +3,10 @@ import NewsPost from '../Model/NewsPost';
 import { Message } from '../Utilities/Message';
 import { BadRequestError } from '../ResponseHandle/BadRequestError'
 import { AuthenticatedRequest } from '../Types/AuthenticatedRequest';
-import { BreakingNewsExpirationTime } from '../Types/BreakingNewsExpiration';
+import { BreakingNewsExpirationTime } from '../Utilities/Constants/AppConstants';
 import * as NewsPostRepository from '../Repository/NewsPostRepository'
-import { okResponse } from '../ResponseHandle/OkResponse';
+import { okResponse } from '../ResponseHandle/okResponse';
+import { IUpdatedFields } from '../Utilities/Enums/IUpdatedFields';
 
 export const DeleteNewsPost = async (req: Request<{id: string}>, res: Response, next: NextFunction) => {
   const {id} = req.params;
@@ -21,6 +22,32 @@ export const DeleteNewsPost = async (req: Request<{id: string}>, res: Response, 
     return next(error);
   }
 }
+
+export const UpdateNewsPost = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+  const { id } = req.params;
+  const updateData = req.body;
+
+  const allowedFields = Object.values(IUpdatedFields) as string[];
+  const invalidFields = Object.keys(req.body).filter((field) => !allowedFields.includes(field));
+
+  if (invalidFields.length > 0) {
+    return next(new BadRequestError(`Invalid fields in update: ${invalidFields.join(', ')}`));
+  }
+
+  try {
+    const newsPost = await NewsPostRepository.getNewsPost(id);
+
+    if (!newsPost) throw new BadRequestError(Message.NEWS.NOT_FOUND);
+
+    const updatedPost = await NewsPostRepository.updateNewsPost(id, updateData);
+
+    if (!updatedPost) throw new BadRequestError(Message.GENERAL.SERVER_ERROR);
+
+    okResponse(res, Message.NEWS.UPDATED, updatedPost);
+  } catch (error) {
+    return next(error);
+  }
+};
 
 export const CreateNewsPost = async (
   req: AuthenticatedRequest,

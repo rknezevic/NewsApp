@@ -1,5 +1,5 @@
 import mongoose, { Schema, Document } from 'mongoose';
-import { IUserRole } from '../Types/IUserRole';
+import { IUserRole } from '../Utilities/Enums/IUserRole';
 
 export interface IUser extends Document {
     role: 'admin' | 'editor' | 'guest';

@@ -1,4 +1,4 @@
-import { AppConstants } from "../Utilities/AppConstants";
+import { AppConstants } from "../Utilities/Constants/ResponseConstants";
 import { BaseError } from "./BaseError";
 
 export class CreatedSuccessfully extends BaseError{

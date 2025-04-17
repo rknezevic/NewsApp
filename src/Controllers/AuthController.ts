@@ -6,9 +6,10 @@ import { IRegisterBody } from '../Types/IRegisterBody';
 import { ILoginBody } from '../Types/ILoginBody';
 import { Message } from '../Utilities/Message';
 import * as UserRepository from '../Repository/UserRepository';
-import process from 'process';
+//import process from 'process';
 import { BadRequestError } from '../ResponseHandle/BadRequestError';
-import { okResponse } from '../ResponseHandle/OkResponse';
+import { okResponse } from '../ResponseHandle/okResponse';
+import { config } from '../config/config'
 
 export const register = async (req: Request<{}, {}, IRegisterBody>, res: Response, next: NextFunction) => {
   const { name, email, password, alias, role } = req.body;
@@ -55,10 +56,9 @@ export const login = async (req: Request<{}, {}, ILoginBody>, res: Response, nex
     if (!isMatch || !user) {
       throw new BadRequestError(Message.AUTH.LOGIN_FAILED)
     }
-
     const token = jwt.sign(
       { id: user._id, role: user.role },
-      process.env.JWT_SECRET as string,
+      config.jwtSecret,
       { expiresIn: '2h' }
     );
     okResponse(res, Message.USER.LOGGED_IN, {token});

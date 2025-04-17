@@ -1,6 +1,10 @@
+import { ObjectId } from "mongoose";
 import NewsPost from "../Model/NewsPost";
-import { BreakingNewsExpirationTime } from "../Types/BreakingNewsExpiration";
 import { INewsPost } from "../Model/NewsPost";
+import { BadRequestError } from "../ResponseHandle/BadRequestError";
+import { ICategory } from "../Utilities/Enums/ICategory";
+import { Message } from "../Utilities/Message";
+import { INewsPostUpdate } from "../Types/INewsPostUpdate";
 
 export const deleteNewsPost = async (id : string) =>{
     const newsPost = await NewsPost.findByIdAndDelete(id);
@@ -15,6 +19,19 @@ export const getActiveBreakingNews = async () => {
     
 }
 
+export const getNewsPost = async (id: string) => {
+    return await NewsPost.findById(id);
+}
+
+export const updateNewsPost = async (id: string, updateData: INewsPostUpdate) => {
+    try{
+    const updatedPost = await NewsPost.findByIdAndUpdate(id, updateData, {new: true})
+    if(!updateNewsPost) throw new BadRequestError(Message.NEWS.FAIL);
+    return updatedPost;
+    }catch{
+        throw new BadRequestError(Message.GENERAL.SERVER_ERROR);
+    }
+}
 export const createNewsPost = async (newsData : INewsPost) => {
     const newsPost = new NewsPost(newsData);
     return await newsPost.save();
