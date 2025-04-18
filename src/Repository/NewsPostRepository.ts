@@ -2,9 +2,10 @@ import { ObjectId } from "mongoose";
 import NewsPost from "../Model/NewsPost";
 import { INewsPost } from "../Model/NewsPost";
 import { BadRequestError } from "../ResponseHandle/BadRequestError";
-import { ICategory } from "../Utilities/Enums/ICategory";
+import { NewsCategory } from "../Utilities/Enums/NewsCategory";
 import { Message } from "../Utilities/Message";
 import { INewsPostUpdate } from "../Types/INewsPostUpdate";
+import { InternalError } from "../ResponseHandle/InternalError";
 
 export const deleteNewsPost = async (id : string) =>{
     const newsPost = await NewsPost.findByIdAndDelete(id);
@@ -26,7 +27,7 @@ export const getNewsPost = async (id: string) => {
 export const updateNewsPost = async (id: string, updateData: INewsPostUpdate) => {
     try{
     const updatedPost = await NewsPost.findByIdAndUpdate(id, updateData, {new: true})
-    if(!updateNewsPost) throw new BadRequestError(Message.NEWS.FAIL);
+    if(!updateNewsPost) throw new InternalError(Message.NEWS.FAIL);
     return updatedPost;
     }catch{
         throw new BadRequestError(Message.GENERAL.SERVER_ERROR);

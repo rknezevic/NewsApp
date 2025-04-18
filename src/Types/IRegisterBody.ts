@@ -1,5 +1,7 @@
+import { UserRole } from "../Utilities/Enums/UserRole";
+
 export interface IRegisterBody {
-    role: string;
+    role: UserRole;
     name: string;
     email: string;
     password: string;

@@ -6,10 +6,10 @@ import { IRegisterBody } from '../Types/IRegisterBody';
 import { ILoginBody } from '../Types/ILoginBody';
 import { Message } from '../Utilities/Message';
 import * as UserRepository from '../Repository/UserRepository';
-//import process from 'process';
 import { BadRequestError } from '../ResponseHandle/BadRequestError';
 import { okResponse } from '../ResponseHandle/okResponse';
 import { config } from '../config/config'
+import { UserRole } from '../Utilities/Enums/UserRole';
 
 export const register = async (req: Request<{}, {}, IRegisterBody>, res: Response, next: NextFunction) => {
   const { name, email, password, alias, role } = req.body;
@@ -23,7 +23,7 @@ export const register = async (req: Request<{}, {}, IRegisterBody>, res: Respons
     const hashPassword = await bcrypt.hash(password, 10);
 
     const newUser = new User({
-      role: role || 'guest',
+      role: role || UserRole.Guest,
       name,
       email,
       password: hashPassword,

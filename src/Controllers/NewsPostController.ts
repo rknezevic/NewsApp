@@ -6,7 +6,8 @@ import { AuthenticatedRequest } from '../Types/AuthenticatedRequest';
 import { BreakingNewsExpirationTime } from '../Utilities/Constants/AppConstants';
 import * as NewsPostRepository from '../Repository/NewsPostRepository'
 import { okResponse } from '../ResponseHandle/okResponse';
-import { IUpdatedFields } from '../Utilities/Enums/IUpdatedFields';
+import { FieldsToUpdate } from '../Utilities/Enums/FieldsToUpdate';
+import { NotFoundError } from '../ResponseHandle/NotFoundError';
 
 export const DeleteNewsPost = async (req: Request<{id: string}>, res: Response, next: NextFunction) => {
   const {id} = req.params;
@@ -27,7 +28,7 @@ export const UpdateNewsPost = async (req: AuthenticatedRequest, res: Response, n
   const { id } = req.params;
   const updateData = req.body;
 
-  const allowedFields = Object.values(IUpdatedFields) as string[];
+  const allowedFields = Object.values(FieldsToUpdate) as string[];
   const invalidFields = Object.keys(req.body).filter((field) => !allowedFields.includes(field));
 
   if (invalidFields.length > 0) {
@@ -37,7 +38,7 @@ export const UpdateNewsPost = async (req: AuthenticatedRequest, res: Response, n
   try {
     const newsPost = await NewsPostRepository.getNewsPost(id);
 
-    if (!newsPost) throw new BadRequestError(Message.NEWS.NOT_FOUND);
+    if (!newsPost) throw new NotFoundError(Message.NEWS.NOT_FOUND);
 
     const updatedPost = await NewsPostRepository.updateNewsPost(id, updateData);
 

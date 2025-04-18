@@ -1,9 +1,9 @@
-import { ICategory } from "../Utilities/Enums/ICategory";
+import { NewsCategory } from "../Utilities/Enums/NewsCategory";
 
 export interface INewsPostUpdate {
     headline: string,
     shortDescription: string,
     fullDescription: string,
     image: string,
-    category: ICategory
+    category: NewsCategory
 };

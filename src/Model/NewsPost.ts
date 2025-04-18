@@ -1,5 +1,5 @@
 import mongoose, { Document, Schema, Types } from 'mongoose';
-import { ICategory } from '../Utilities/Enums/ICategory';
+import { ICategory } from '../Utilities/Enums/NewsCategory';
 
 export interface INewsPost extends Document {
   headline: string;

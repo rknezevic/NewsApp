@@ -1,4 +1,4 @@
-export enum ICategory {
+export enum NewsCategory {
     Worldwide = 'worldwide', 
     Local = 'local', 
     Sport = 'sport',

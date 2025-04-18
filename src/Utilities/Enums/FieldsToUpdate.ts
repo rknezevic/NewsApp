@@ -1,4 +1,4 @@
-export enum IUpdatedFields {
+export enum FieldsToUpdate {
     Headline = 'headline',
     ShortDescription = 'shortDescription',
     FullDescription = 'fullDescription',
