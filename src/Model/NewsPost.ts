@@ -1,18 +1,19 @@
 import mongoose, { Document, Schema, Types } from 'mongoose';
-import { ICategory } from '../Utilities/Enums/NewsCategory';
+import { NewsCategory } from '../Utilities/Enums/NewsCategory';
 
 export interface INewsPost extends Document {
   headline: string;
   shortDescription: string;
   fullDescription: string;
   image: string;
-  category: 'worldwide' | 'local' | 'sport' | 'economy' | 'entertainment';
+  category: NewsCategory;
   isBreaking: boolean;
   breakingExpiresAt?: Date | null;
   createdBy: Types.ObjectId;
   lastEditedBy?: Types.ObjectId;
   createdAt?: Date;
   updatedAt?: Date;
+  views: number;
 }
 
 const newsPostSchema: Schema<INewsPost> = new Schema(
@@ -36,7 +37,7 @@ const newsPostSchema: Schema<INewsPost> = new Schema(
     },
     category: {
       type: String,
-      enum: ICategory,
+      enum: NewsCategory,
       required: true,
     },
     isBreaking: {
@@ -56,6 +57,11 @@ const newsPostSchema: Schema<INewsPost> = new Schema(
       type: Schema.Types.ObjectId,
       ref: 'User',
     },
+    views: {
+      type: Number,
+      default: 0,
+      immutable: true,
+    }
   },
   { timestamps: true }
 );

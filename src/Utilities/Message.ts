@@ -22,7 +22,11 @@ export const Message = {
         FAIL : "Your request couldn't be done. Please try again!",
         SUCCESS: "Your request has been processed successfully!",
         NOT_FOUND: "News post with given id was not found.",
-        UPDATED: "News post updated successfully!"
+        UPDATED: "News post updated successfully!",
+        COMMENT_ADDED: "Comment added successfully!",
+        COMMENT_NOT_FOUND: "Comment not found.",
+        COMMENT_DELETED: "Comment deleted successfully!",
+        COMMENT_FAILED: "Error adding comment.",
     },
     GENERAL: {
         SERVER_ERROR : "Something went wrong. Please try again.",

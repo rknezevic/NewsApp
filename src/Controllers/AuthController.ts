@@ -57,7 +57,7 @@ export const login = async (req: Request<{}, {}, ILoginBody>, res: Response, nex
       throw new BadRequestError(Message.AUTH.LOGIN_FAILED)
     }
     const token = jwt.sign(
-      { id: user._id, role: user.role },
+      { id: user._id, role: user.role, name: user.name },
       config.jwtSecret,
       { expiresIn: '2h' }
     );

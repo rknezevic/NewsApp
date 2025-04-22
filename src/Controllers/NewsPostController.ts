@@ -9,8 +9,8 @@ import { okResponse } from '../ResponseHandle/okResponse';
 import { FieldsToUpdate } from '../Utilities/Enums/FieldsToUpdate';
 import { NotFoundError } from '../ResponseHandle/NotFoundError';
 
-export const DeleteNewsPost = async (req: Request<{id: string}>, res: Response, next: NextFunction) => {
-  const {id} = req.params;
+export const DeleteNewsPost = async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
+  const { id } = req.params;
 
   try {
     const deleteNews = await NewsPostRepository.deleteNewsPost(id);
@@ -45,6 +45,20 @@ export const UpdateNewsPost = async (req: AuthenticatedRequest, res: Response, n
     if (!updatedPost) throw new BadRequestError(Message.GENERAL.SERVER_ERROR);
 
     okResponse(res, Message.NEWS.UPDATED, updatedPost);
+  } catch (error) {
+    return next(error);
+  }
+};
+
+export const GetSingleNewsPost = async (req: Request, res: Response, next: NextFunction) => {
+  const { id } = req.params;
+
+  try {
+    const newsPost = await NewsPostRepository.getSingleNewsPost(id);
+
+    if (!newsPost) throw new NotFoundError(Message.NEWS.NOT_FOUND);
+
+    okResponse(res, Message.NEWS.SUCCESS, newsPost);
   } catch (error) {
     return next(error);
   }
@@ -85,13 +99,61 @@ export const CreateNewsPost = async (
       createdBy: req.user?.id,
       lastEditedBy: req.user?.id,
     });
-    
+
     const savedNewsPost = NewsPostRepository.createNewsPost(newsPost);
-    if(!savedNewsPost) throw new BadRequestError(Message.NEWS.CREATION_FAILED);
+    if (!savedNewsPost) throw new BadRequestError(Message.NEWS.CREATION_FAILED);
 
     okResponse(res, Message.NEWS.CREATED, { newsPost })
   } catch (error) {
     console.error('Error saving news post:', error);
     return next(error);
+  }
+};
+
+export const GetComments = async (req: AuthenticatedRequest, res: Response) => {
+  const { id } = req.params;
+  try {
+    const newsPost = await NewsPostRepository.getSingleNewsPost(id);
+    if (!newsPost) {
+      throw new NotFoundError(Message.NEWS.NOT_FOUND);
+    }
+    const comments = await NewsPostRepository.getComments(id);
+    if (!comments) {
+      throw new NotFoundError(Message.NEWS.COMMENT_NOT_FOUND);
+    }
+    okResponse(res, Message.NEWS.SUCCESS, comments);
+  } catch (err) {
+    throw new BadRequestError(Message.GENERAL.SERVER_ERROR);
+  }
+};
+
+export const DeleteComment = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+  const { commentId } = req.params;
+  try {
+    const comment = await NewsPostRepository.deleteComment(commentId);
+    if (!comment) {
+      throw new NotFoundError(Message.NEWS.COMMENT_NOT_FOUND);
+    }
+    okResponse(res, Message.NEWS.COMMENT_DELETED);
+  } catch (err) {
+    return next(err);
+  }
+};
+
+export const AddComment = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+  const { comment } = req.body;
+  const newsPostId = req.params.id;
+  const commenterName = req.user?.name || 'Anonymous';
+  if (!commenterName) {
+    return next(new BadRequestError(Message.NEWS.COMMENT_FAILED));
+  }
+  try {
+    const response = await NewsPostRepository.addComment(newsPostId, commenterName, comment);
+    if (!response) {
+      throw new BadRequestError(Message.NEWS.COMMENT_FAILED);
+    }
+    okResponse(res, Message.NEWS.COMMENT_ADDED, response);
+  } catch (err) {
+    return next(err);
   }
 };
