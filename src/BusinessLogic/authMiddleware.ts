@@ -3,8 +3,7 @@ import jwt from 'jsonwebtoken';
 import { Message } from '../Utilities/Message';
 import { JwtPayload } from '../Types/JwtPayload'
 import { AuthenticatedRequest } from '../Types/AuthenticatedRequest';
-import { BadRequestError } from '../ResponseHandle/BadRequestError';
-import { AuthorizationError } from '../ResponseHandle/AuthorizationError';
+import { AuthorizationError, BadRequestError } from '../ResponseHandle/ErrorHandler';
 import { config } from '../config/config'
 
 export const authMiddleware = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {

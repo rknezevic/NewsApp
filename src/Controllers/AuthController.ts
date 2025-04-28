@@ -2,16 +2,15 @@ import { NextFunction, Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import User from '../Model/User';
-import { IRegisterBody } from '../Types/IRegisterBody';
-import { ILoginBody } from '../Types/ILoginBody';
 import { Message } from '../Utilities/Message';
 import * as UserRepository from '../Repository/UserRepository';
-import { BadRequestError } from '../ResponseHandle/BadRequestError';
-import { okResponse } from '../ResponseHandle/okResponse';
+import { BadRequestError } from '../ResponseHandle/ErrorHandler';
 import { config } from '../config/config'
 import { UserRole } from '../Utilities/Enums/UserRole';
+import { ResponseConstants } from '../Utilities/Constants/ResponseConstants';
+import { okResponse } from '../ResponseHandle/SuccessHandler';
 
-export const register = async (req: Request<{}, {}, IRegisterBody>, res: Response, next: NextFunction) => {
+export const register = async (req: Request, res: Response, next: NextFunction) => {
   const { name, email, password, alias, role } = req.body;
 
   try {
@@ -33,17 +32,18 @@ export const register = async (req: Request<{}, {}, IRegisterBody>, res: Respons
     const savedUser = await UserRepository.createUser(newUser);
 
     if (savedUser && savedUser._id) {
-      okResponse(res, Message.USER.CREATED, {savedUser});
+      okResponse(res, savedUser);
     } else {
       throw new BadRequestError(Message.USER.REG_FAILED)
     }
+
   } catch (error) {
     console.error(error);
-      return next (error);
+    return next(error);
   }
 };
 
-export const login = async (req: Request<{}, {}, ILoginBody>, res: Response, next: NextFunction) => {
+export const login = async (req: Request, res: Response, next: NextFunction) => {
   const { email, password } = req.body;
 
   try {
@@ -57,12 +57,13 @@ export const login = async (req: Request<{}, {}, ILoginBody>, res: Response, nex
       throw new BadRequestError(Message.AUTH.LOGIN_FAILED)
     }
     const token = jwt.sign(
-      { id: user._id, role: user.role, name: user.name },
+      { id: user._id, role: user.role, name: user.name }, //* */
       config.jwtSecret,
       { expiresIn: '2h' }
     );
-    okResponse(res, Message.USER.LOGGED_IN, {token});
+    res.status(ResponseConstants.HttpStatusCodes.OK).json({"token": token});
   } catch (error) {
+    console.error(error);
     return next(error);
   }
 };

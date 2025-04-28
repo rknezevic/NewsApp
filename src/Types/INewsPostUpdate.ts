@@ -5,5 +5,7 @@ export interface INewsPostUpdate {
     shortDescription: string,
     fullDescription: string,
     image: string,
-    category: NewsCategory
+    category: NewsCategory,
+    lastEditedBy?: string,
+    updatedAt?: Date,
 };

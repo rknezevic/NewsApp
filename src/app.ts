@@ -2,15 +2,12 @@ import express, { Application } from 'express';
 import connectDb from './DatabaseLogic/dbConfig';
 import {config} from './config/config';
 import { errorHandler } from './BusinessLogic/errorHandler';
-import authRoutes from './Routes/auth';
-import newsPostRoute from './Routes/newsPostRoute';
+import router from './Routes/router';
 
 const app: Application = express();
-
 app.use(express.json());
 
-app.use('/api/auth', authRoutes);
-app.use('/api/news-post', newsPostRoute);
+app.use(router);
 
 app.use(errorHandler)
 connectDb();

@@ -1,5 +1,6 @@
 import mongoose, { Document, Schema, Types } from 'mongoose';
 import { NewsCategory } from '../Utilities/Enums/NewsCategory';
+import { IComment, Comment } from './Comment';
 
 export interface INewsPost extends Document {
   headline: string;
@@ -14,6 +15,7 @@ export interface INewsPost extends Document {
   createdAt?: Date;
   updatedAt?: Date;
   views: number;
+  comment?: IComment[];
 }
 
 const newsPostSchema: Schema<INewsPost> = new Schema(
@@ -47,6 +49,7 @@ const newsPostSchema: Schema<INewsPost> = new Schema(
     breakingExpiresAt: {
       type: Date,
       default: null,
+      expires: 60 * 60 * 48, // 2 days
     },
     createdBy: {
       type: Schema.Types.ObjectId,
@@ -61,10 +64,14 @@ const newsPostSchema: Schema<INewsPost> = new Schema(
       type: Number,
       default: 0,
       immutable: true,
-    }
+    },
+    comment: [Comment],
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+  }
 );
+
 
 const NewsPost = mongoose.model<INewsPost>('NewsPost', newsPostSchema);
 export default NewsPost;

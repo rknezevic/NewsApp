@@ -27,6 +27,7 @@ export const Message = {
         COMMENT_NOT_FOUND: "Comment not found.",
         COMMENT_DELETED: "Comment deleted successfully!",
         COMMENT_FAILED: "Error adding comment.",
+        INVALID_FIELDS: "Fields are not valid for update:",
     },
     GENERAL: {
         SERVER_ERROR : "Something went wrong. Please try again.",
