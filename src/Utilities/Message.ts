@@ -1,6 +1,6 @@
 export const Message = {
     AUTH: {
-        ACCESS_DENIED : "Access denied: token not found.",
+        ACCESS_DENIED : "Access denied: you don't have permission for this action.",
         INVALID_TOKEN : "Token is invalid or expired.",
         LOGIN_FAILED : "Invalid login credentials.",
         EMAIL_EXISTS : "User with this email already exists.",

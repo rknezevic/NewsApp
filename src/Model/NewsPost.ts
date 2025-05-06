@@ -1,6 +1,8 @@
 import mongoose, { Document, Schema, Types } from 'mongoose';
 import { NewsCategory } from '../Utilities/Enums/NewsCategory';
 import { IComment, Comment } from './Comment';
+import { BreakingNewsExpirationTime, TwoDaysInSeconds } from '../Utilities/Constants/AppConstants';
+import { ICommentInput } from '../Types/ICommentInput';
 
 export interface INewsPost extends Document {
   headline: string;
@@ -49,7 +51,7 @@ const newsPostSchema: Schema<INewsPost> = new Schema(
     breakingExpiresAt: {
       type: Date,
       default: null,
-      expires: 60 * 60 * 48, // 2 days
+      expires: TwoDaysInSeconds,
     },
     createdBy: {
       type: Schema.Types.ObjectId,

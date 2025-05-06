@@ -31,4 +31,10 @@ export class ForbiddenError extends BaseError {
     }
 }
 
+export class ConflictError extends BaseError {
+    constructor(message : string){
+        super(ResponseConstants.HttpStatusCodes.CONFLICT, ResponseConstants.ErrorTypes.CONFLICT, message)
+    }
+}
+
 

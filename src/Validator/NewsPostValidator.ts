@@ -1,5 +1,4 @@
 import { body } from "express-validator";
-import { createNewsPost, updateNewsPost } from "../Repository/NewsPostRepository";
 
 export const NewsPostValidator =
 {
@@ -42,7 +41,7 @@ export const NewsPostValidator =
             .trim()
             .optional()
             .isLength({ max: 100 })
-            .withMessage("Headline must be less than 100 characters"),
+            .withMessage("Headline must be less than 100 characters"), //izdvojiti
         body("shortDescription")
             .trim()
             .optional()

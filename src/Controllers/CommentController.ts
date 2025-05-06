@@ -8,8 +8,9 @@ import { Response, NextFunction } from "express";
 import { UserRole } from "../Utilities/Enums/UserRole";
 import { IComment } from "../Model/Comment";
 import NewsPost from "../Model/NewsPost";
+import { ICommentInputData } from "../Types/ICommentInput";
 
-export const GetComments = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+export const GetComments = async (req: AuthenticatedRequest, res: Response, next: NextFunction):Promise<any> => {
   const { newsPostId } = req.params;
   try {
     const newsPost = await NewsPost.findOne({ _id: newsPostId });
@@ -20,55 +21,51 @@ export const GetComments = async (req: AuthenticatedRequest, res: Response, next
     if (!comments) {
       throw new NotFoundError(Message.NEWS.COMMENT_NOT_FOUND);
     }
-    okResponse(res, comments);
+    return okResponse(res, comments);
   } catch (err) {
-    throw new BadRequestError(Message.GENERAL.SERVER_ERROR);
+    throw new BadRequestError(Message.GENERAL.SERVER_ERROR);//
   }
 };
 
-export const DeleteComment = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+export const DeleteComment = async (req: AuthenticatedRequest, res: Response, next: NextFunction):Promise<any> => {
   const { newsPostId, commentId } = req.params;
   try {
     const newsPost = await NewsPost.findById(newsPostId);
     if (!newsPost) {
       throw new NotFoundError(Message.NEWS.NOT_FOUND);
     }
-    const isValidComment = await CommentRepository.isValidComment(newsPostId, commentId);
-    if (!isValidComment) {
-      throw new NotFoundError(Message.NEWS.COMMENT_NOT_FOUND);
-    }
     const comment = await CommentRepository.deleteComment(newsPostId, commentId);
     if (!comment) {
       throw new NotFoundError(Message.NEWS.COMMENT_NOT_FOUND);
     }
-    okResponse(res, Message.NEWS.COMMENT_DELETED);
+    return okResponse(res, Message.NEWS.COMMENT_DELETED);
   } catch (err) {
     console.error(err);
     return next(err);
   }
 };
 
-export const AddComment = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => { 
+export const AddComment = async (req: AuthenticatedRequest, res: Response, next: NextFunction):Promise<any> => { 
     const { newsPostId } = req.params;
 
   try {
-    const newsPost = await NewsPostRepository.getNewsPost(newsPostId);
+    const newsPost = await NewsPostRepository.getSingleNewsPost(newsPostId);
 
     if (!newsPost) {
       throw new NotFoundError(Message.NEWS.NOT_FOUND);
     }
-    const commentData: IComment = {
+    const commentData: ICommentInputData = {
         author : req.user?.name || UserRole.Guest,
         comment : req.body.comment,
         };
-        if (!commentData) {
-            throw new BadRequestError(Message.GENERAL.SERVER_ERROR);
+        if (!commentData.comment) {
+            return next(new BadRequestError(Message.NEWS.COMMENT_FAILED));
         }
     const response = await CommentRepository.addComment(newsPostId, commentData);
     if (!response) {
       return next(new BadRequestError(Message.NEWS.COMMENT_FAILED));
     }
-    okResponse(res, response);
+    return okResponse(res, response);
   } catch (err) {
     return next(err);
   }

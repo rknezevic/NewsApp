@@ -8,7 +8,7 @@ import * as NewsPostRepository from '../Repository/NewsPostRepository'
 import { okResponse } from '../ResponseHandle/SuccessHandler';
 import { INewsPostUpdate } from '../Types/INewsPostUpdate';
 
-export const DeleteNewsPost = async (req: Request<{ id: string }>, res: Response, next: NextFunction) => {
+export const DeleteNewsPost = async (req: Request<{ id: string }>, res: Response, next: NextFunction):Promise<any> => {
   const { id } = req.params;
 
   try {
@@ -16,21 +16,17 @@ export const DeleteNewsPost = async (req: Request<{ id: string }>, res: Response
     if (!deleteNews) {
       throw new NotFoundError(Message.NEWS.NOT_FOUND);
     }
-    okResponse(res, Message.NEWS.SUCCESS);
+    return okResponse(res, Message.NEWS.SUCCESS);
   } catch (error) {
     console.error(error);
     return next(error);
   }
 }
 
-export const UpdateNewsPost = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+export const UpdateNewsPost = async (req: AuthenticatedRequest, res: Response, next: NextFunction):Promise<any> => {
   const { id } = req.params;
   const { headline, shortDescription, fullDescription, image, category } = req.body;
-  const invalidFields = Object.keys(req.body).filter(field => !allowedFields.includes(field));
-  if(invalidFields.length > 0) {
-    return next(new ForbiddenError(`${Message.NEWS.INVALID_FIELDS} ${invalidFields.join(', ')}`));
-  }
-
+  
   try {
     const updateData: INewsPostUpdate = {
       headline,
@@ -41,49 +37,45 @@ export const UpdateNewsPost = async (req: AuthenticatedRequest, res: Response, n
       lastEditedBy: req.user?.id,
       updatedAt: new Date(),
     };
-    const newsPost = await NewsPostRepository.getNewsPost(id);
-
+    const newsPost = await NewsPostRepository.getSingleNewsPost(id);
     if (!newsPost) throw new NotFoundError(Message.NEWS.NOT_FOUND);
 
     const updatedPost = await NewsPostRepository.updateNewsPost(id, updateData);
-
     if (!updatedPost) throw new BadRequestError(Message.GENERAL.SERVER_ERROR);
 
-    okResponse(res, updatedPost);
+    return okResponse(res, updatedPost);
   } catch (error) {
     console.error(error);
     return next(error);
   }
 };
 
-export const GetSingleNewsPost = async (req: Request, res: Response, next: NextFunction) => {
+export const GetSingleNewsPost = async (req: Request, res: Response, next: NextFunction):Promise<any> => {
   const { id } = req.params;
 
   try {
-    const newsPost = await NewsPostRepository.getSingleNewsPostForViews(id);
+    const newsPost = await NewsPostRepository.getSingleNewsPost(id, true);
 
     if (!newsPost) throw new NotFoundError(Message.NEWS.NOT_FOUND);
 
-    okResponse(res, newsPost);
+    return okResponse(res, newsPost);
   } catch (error) {
     return next(error);
   }
 };
 
-export const CreateNewsPost = async (
-  req: AuthenticatedRequest,
-  res: Response,
-  next: NextFunction
-) => {
-  const { headline, shortDescription, fullDescription, image, category, isBreaking } = req.body;
+export const CreateNewsPost = async (req: AuthenticatedRequest, res: Response, next: NextFunction):Promise<any> => {
+  const { headline, shortDescription, fullDescription, image, category } = req.body;
+  let isBreaking = req.body.isBreaking;
   try {
+    //novi postaje breaking, stara vijest se brise -----
     if (isBreaking) {
       const activeBreakingNews = await NewsPostRepository.getActiveBreakingNews();
       if (activeBreakingNews) {
-        throw new BadRequestError(Message.NEWS.BREAKING_EXISTS);
+        activeBreakingNews.isBreaking = false;
+        activeBreakingNews.breakingExpiresAt = null; 
       }
     }
-
     const newsPost = new NewsPost({
       headline,
       shortDescription,
@@ -101,9 +93,22 @@ export const CreateNewsPost = async (
     const savedNewsPost = await NewsPostRepository.createNewsPost(newsPost);
     if (!savedNewsPost) throw new BadRequestError(Message.NEWS.CREATION_FAILED);
 
-    okResponse(res,newsPost)
+    return okResponse(res,newsPost)
   } catch (error) {
     console.error('Error saving news post:', error);
     return next(error);
   }
 };
+
+export const GetNewsPostForFrontPage = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+
+  try {
+    const newsPosts = await NewsPostRepository.getNewsPostForFrontPage();
+    if (!newsPosts) throw new NotFoundError(Message.NEWS.NOT_FOUND);
+    console.log(newsPosts);
+
+    return okResponse(res, newsPosts);
+  } catch (error) {
+    return next(error);
+  }
+}

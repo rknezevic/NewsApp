@@ -3,18 +3,19 @@ import { Message } from "../Utilities/Message";
 import { BaseError } from "./BaseError";
 import { Response } from "express";
 
-export class CreatedSuccessfully extends BaseError{
-    constructor(message: string){
-        super(ResponseConstants.HttpStatusCodes.CREATED, ResponseConstants.SuccessTypes.CREATED, message)
+export const CreatedSuccessfully = <T = any>(res: Response, data?: T): Response => {
+    if (data === undefined) {
+        return res.status(ResponseConstants.HttpStatusCodes.CREATED).json({});
     }
-}
-export class NoContentSuccess extends BaseError{
-    constructor(message: string){
-        super(ResponseConstants.HttpStatusCodes.NO_CONTENT, Message.NEWS.SUCCESS, message)
+    return res.status(ResponseConstants.HttpStatusCodes.CREATED).json(data);
+};
+
+export const NoContentResponse = (res: Response): Response => {
+    return res.status(ResponseConstants.HttpStatusCodes.NO_CONTENT).json({});
+};
+export const okResponse = <T = any>(res: Response, data?: T): Response => {
+    if (data === undefined) {
+        return res.status(ResponseConstants.HttpStatusCodes.OK).json({});
     }
-}
-export const okResponse = (res: Response, data?: any) =>{
-    return res.status(ResponseConstants.HttpStatusCodes.OK).json(
-        data ? { data } : {},
-    );
+    return res.status(ResponseConstants.HttpStatusCodes.OK).json(data);
 };

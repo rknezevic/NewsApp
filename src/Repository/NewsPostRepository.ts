@@ -2,7 +2,10 @@ import NewsPost from "../Model/NewsPost";
 import { INewsPost } from "../Model/NewsPost";
 import { Message } from "../Utilities/Message";
 import { INewsPostUpdate } from "../Types/INewsPostUpdate";
-import { NotFoundError, InternalError, BadRequestError  } from "../ResponseHandle/ErrorHandler";
+import { NotFoundError, InternalError, BadRequestError } from "../ResponseHandle/ErrorHandler";
+import { INewsPostFrontPage } from "../Types/INewsPostFrontPage";
+import { NewsCategory } from "../Utilities/Enums/NewsCategory";
+import { mongoErrorHandler } from "../BusinessLogic/mongoErrorHandler";
 
 
 export const deleteNewsPost = async (id: string) => {
@@ -18,19 +21,8 @@ export const getActiveBreakingNews = async () => {
 
 }
 
-// funkcija se koristi samo za dohvacanje news posta putem id-a, koristi se samo na backendu
-export const getNewsPost = async (id: string) => {
-    return await NewsPost.findById(id);
-}
-
-export const updateNewsPost = async (id: string, updateData: INewsPostUpdate) => {
-    try {
-        const updatedPost = await NewsPost.findByIdAndUpdate(id, updateData, { new: true })
-        if (!updateNewsPost) throw new InternalError(Message.NEWS.FAIL);
-        return updatedPost;
-    } catch {
-        throw new BadRequestError(Message.GENERAL.SERVER_ERROR);
-    }
+export const updateNewsPost = async (id: string, updateData: INewsPostUpdate) => {    
+    return await NewsPost.findByIdAndUpdate(id, updateData, { new: true })   
 }
 export const createNewsPost = async (newsData: INewsPost) => {
     const newsPost = new NewsPost(newsData);
@@ -43,20 +35,60 @@ export const incrementPageVisits = async (postId: string) => {
         { $inc: { views: 1 } },
         { new: true }
     )
-    if (!newsPost) {
-        throw new NotFoundError(Message.NEWS.NOT_FOUND);
-    }
-    return newsPost;
+    return newsPost; 
 }
 
-// ova funkcija ce se koristiti kada zelimo prikazati post te povecati broj posjeta
-export const getSingleNewsPostForViews = async (id: string) => {
+export const getSingleNewsPost = async (id: string, increment?: boolean) => {
     const newsPost = await NewsPost.findById(id);
-
-    incrementPageVisits(id);
-
-    if (!newsPost) {
-        throw new NotFoundError(Message.NEWS.NOT_FOUND);
+    if (increment) {
+        await incrementPageVisits(id);
     }
     return newsPost;
 }
+export const getNewsPostForFrontPage = async () => {
+    try {
+    const categories = Object.values(NewsCategory);  
+
+    const newsByCategoryPromises = categories.map(async (category) => {
+      const posts = await NewsPost.find({ category, isBreaking: false })
+        .sort({ createdAt: -1 })
+        .limit(4)
+  
+      return {
+        category,
+        posts,
+      };
+    });
+    const newsPosts = await Promise.all(newsByCategoryPromises);
+
+    const breakingNews = await getActiveBreakingNews();
+    
+    const mappedNewsPosts = newsPosts.map((item: any) => {
+        return {
+            category: item.category,
+            posts: item.posts.map((post: INewsPostFrontPage) => ({
+                headline: post.headline,
+                shortDescription: post.shortDescription,
+                image: post.image,
+                category: post.category,
+                createdBy: post.createdBy,
+                createdAt: post.createdAt,
+                updatedAt: post.updatedAt,
+            })),
+        };
+    });
+    //transformacija mapiranih vrijesti u jedan objekt s kategorijama kao kljucevima i postovima kao vrijednostima
+    const result = mappedNewsPosts.reduce((acc, curr, index) => {
+        const category = categories[index]; 
+        acc[category] = curr.posts;
+        return acc;
+      }, {} as Record<NewsCategory, typeof mappedNewsPosts[number]["posts"]>);
+    return {
+      ...result,
+      breakingNews,
+    };
+    }
+    catch (error) {
+        throw mongoErrorHandler(error);
+    }
+};
