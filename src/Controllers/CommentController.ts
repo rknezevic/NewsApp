@@ -6,9 +6,8 @@ import { Message } from "../Utilities/Message";
 import { okResponse } from "../ResponseHandle/SuccessHandler";
 import { Response, NextFunction } from "express";
 import { UserRole } from "../Utilities/Enums/UserRole";
-import { IComment } from "../Model/Comment";
 import NewsPost from "../Model/NewsPost";
-import { ICommentInputData } from "../Types/ICommentInput";
+import { CommentInput} from "../Types/ICommentInput";
 
 export const GetComments = async (req: AuthenticatedRequest, res: Response, next: NextFunction):Promise<any> => {
   const { newsPostId } = req.params;
@@ -47,21 +46,22 @@ export const DeleteComment = async (req: AuthenticatedRequest, res: Response, ne
 
 export const AddComment = async (req: AuthenticatedRequest, res: Response, next: NextFunction):Promise<any> => { 
     const { newsPostId } = req.params;
+    const user = req.user;
 
   try {
     const newsPost = await NewsPostRepository.getSingleNewsPost(newsPostId);
-
     if (!newsPost) {
       throw new NotFoundError(Message.NEWS.NOT_FOUND);
     }
-    const commentData: ICommentInputData = {
-        author : req.user?.name || UserRole.Guest,
+    const newComment = await CommentInput.create({
+        author : user?.name || UserRole.Guest,
         comment : req.body.comment,
-        };
-        if (!commentData.comment) {
-            return next(new BadRequestError(Message.NEWS.COMMENT_FAILED));
-        }
-    const response = await CommentRepository.addComment(newsPostId, commentData);
+    });
+    if (!newComment) {
+        return next(new BadRequestError(Message.NEWS.COMMENT_FAILED));
+    }
+
+    const response = await CommentRepository.addComment(newsPostId, newComment);
     if (!response) {
       return next(new BadRequestError(Message.NEWS.COMMENT_FAILED));
     }

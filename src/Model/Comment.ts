@@ -5,12 +5,11 @@ export interface IComment {
   comment: string;
 }
 
-export const Comment = new Schema<IComment>(
+export const commentSchema = new mongoose.Schema<IComment>(
   {
     author: { type: String, required: true },
     comment: { type: String, required: true },
   },
   { timestamps: { createdAt: true, updatedAt: false } }
 );
-
-//export const Comment = mongoose.model<IComment>('Comment', commentSchema);
+export const Comment = mongoose.model<IComment>('Comment', commentSchema);

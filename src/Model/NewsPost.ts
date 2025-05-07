@@ -1,8 +1,8 @@
 import mongoose, { Document, Schema, Types } from 'mongoose';
 import { NewsCategory } from '../Utilities/Enums/NewsCategory';
-import { IComment, Comment } from './Comment';
-import { BreakingNewsExpirationTime, TwoDaysInSeconds } from '../Utilities/Constants/AppConstants';
+import {  TwoDaysInSeconds } from '../Utilities/Constants/AppConstants';
 import { ICommentInput } from '../Types/ICommentInput';
+import { Comment, IComment } from './Comment';
 
 export interface INewsPost extends Document {
   headline: string;
@@ -67,7 +67,7 @@ const newsPostSchema: Schema<INewsPost> = new Schema(
       default: 0,
       immutable: true,
     },
-    comment: [Comment],
+    comment: [Comment.schema],
   },
   {
     timestamps: true,

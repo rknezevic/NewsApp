@@ -55,7 +55,7 @@ export const login = async (req: Request, res: Response, next: NextFunction): Pr
     if (!isMatch || !user) {
       throw new BadRequestError(Message.AUTH.LOGIN_FAILED)
     }
-    const token = await signToken(user);
+    const token = signToken(user);
     return okResponse(res, {token});
   } catch (error) {
     console.error(error);

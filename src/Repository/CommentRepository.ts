@@ -1,4 +1,3 @@
-import { IComment } from "../Model/Comment";
 import NewsPost from "../Model/NewsPost";
 import { ICommentInput } from "../Types/ICommentInput";
 
