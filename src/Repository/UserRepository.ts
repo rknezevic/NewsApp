@@ -11,6 +11,6 @@ export const createUser = async (userData : IUser) => {
     return await user.save();
 }
 
-export const findUserById = async (id?: string) => {
+export const findUserById = async (id: string) => {
     return await User.findById(id);
 }

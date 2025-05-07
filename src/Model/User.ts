@@ -12,7 +12,7 @@ export interface IUser extends Document {
   }
   
 
-const userSchema: Schema<IUser> = new mongoose.Schema(
+const userSchema = new mongoose.Schema(
   {
     role: {
       type: String,

@@ -6,6 +6,7 @@ import { AuthenticatedRequest } from '../Types/AuthenticatedRequest';
 import { AuthorizationError, BadRequestError } from '../ResponseHandle/ErrorHandler';
 import { config } from '../config/config'
 import * as UserRepository from '../Repository/UserRepository';
+
 export const authMiddleware = async (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
   const authHeader = req.headers.authorization;
 
@@ -18,16 +19,11 @@ export const authMiddleware = async (req: AuthenticatedRequest, res: Response, n
   try {
     const decoded = jwt.verify(token, config.jwtSecret) as JwtPayload;
     const user = await UserRepository.findUserById(decoded.id);
+    console.log(user);
     if (!user) {
       throw new AuthorizationError(Message.USER.NOT_FOUND);
     }
-
-    req.user = {
-      id: user._id as string,
-      email: user.email as string,
-      role: user.role,
-      name: user.name as string,
-    };
+    req.user = user; 
     next();
   } catch (error) {
     return next(error);
