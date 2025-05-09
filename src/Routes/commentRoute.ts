@@ -1,9 +1,9 @@
 import express from 'express';
-import { authMiddleware, permissionCheck } from '../BusinessLogic/authMiddleware';
+import { authMiddleware, permissionCheck } from '../middleware/authMiddleware';
 import { AddComment, DeleteComment, GetComments } from '../Controllers/CommentController';
 
 import { UserRole } from '../Utilities/Enums/UserRole';
-import { validationMiddleware } from '../BusinessLogic/validationMiddleware';
+import { validationMiddleware } from '../middleware/validationMiddleware';
 import { commentValidator } from '../Validator/CommentValidator';
 
 

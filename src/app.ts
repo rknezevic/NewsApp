@@ -1,7 +1,7 @@
 import express, { Application } from 'express';
 import connectDb from './DatabaseLogic/dbConfig';
 import {config} from './config/config';
-import { errorHandler } from './BusinessLogic/errorHandler';
+import { errorHandler } from './middleware/errorHandler';
 import router from './Routes/router';
 
 const app: Application = express();

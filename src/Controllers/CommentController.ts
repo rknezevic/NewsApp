@@ -7,7 +7,7 @@ import { okResponse } from "../ResponseHandle/SuccessHandler";
 import { Response, NextFunction } from "express";
 import { UserRole } from "../Utilities/Enums/UserRole";
 import NewsPost from "../Model/NewsPost";
-import { CommentInput} from "../Types/ICommentInput";
+import { Comment } from "../Model/Comment";
 
 export const GetComments = async (req: AuthenticatedRequest, res: Response, next: NextFunction):Promise<any> => {
   const { newsPostId } = req.params;
@@ -53,9 +53,12 @@ export const AddComment = async (req: AuthenticatedRequest, res: Response, next:
     if (!newsPost) {
       throw new NotFoundError(Message.NEWS.NOT_FOUND);
     }
-    const newComment = await CommentInput.create({
+    console.log(user?.id);
+    console.log(user?.name);
+    const newComment = await Comment.create({
         author : user?.name || UserRole.Guest,
         comment : req.body.comment,
+        userId : user?.id,
     });
     if (!newComment) {
         return next(new BadRequestError(Message.NEWS.COMMENT_FAILED));

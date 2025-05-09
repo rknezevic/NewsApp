@@ -1,7 +1,6 @@
 import mongoose, { Document, Schema, Types } from 'mongoose';
 import { NewsCategory } from '../Utilities/Enums/NewsCategory';
 import {  TwoDaysInSeconds } from '../Utilities/Constants/AppConstants';
-import { ICommentInput } from '../Types/ICommentInput';
 import { Comment, IComment } from './Comment';
 
 export interface INewsPost extends Document {
@@ -65,7 +64,6 @@ const newsPostSchema: Schema<INewsPost> = new Schema(
     views: {
       type: Number,
       default: 0,
-      immutable: true,
     },
     comment: [Comment.schema],
   },

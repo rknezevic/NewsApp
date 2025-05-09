@@ -1,9 +1,9 @@
 import express from 'express';
-import { authMiddleware, permissionCheck } from '../BusinessLogic/authMiddleware';
+import { authMiddleware, permissionCheck } from '../middleware/authMiddleware';
 import { CreateNewsPost, DeleteNewsPost, GetNewsPostForFrontPage, GetSingleNewsPost, UpdateNewsPost } from '../Controllers/NewsPostController';
 import { UserRole } from '../Utilities/Enums/UserRole';
 import { NewsPostValidator } from '../Validator/NewsPostValidator';
-import { validationMiddleware } from '../BusinessLogic/validationMiddleware';
+import { validationMiddleware } from '../middleware/validationMiddleware';
 
 const router = express.Router();
 

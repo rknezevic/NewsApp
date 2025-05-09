@@ -1,7 +1,7 @@
+import { IComment } from "../Model/Comment";
 import NewsPost from "../Model/NewsPost";
-import { ICommentInput } from "../Types/ICommentInput";
 
-export const addComment = async (postId: string, newComment: ICommentInput) => {
+export const addComment = async (postId: string, newComment: IComment) => {
     await NewsPost.findByIdAndUpdate(postId, {
         $push: { comment: newComment },
     });

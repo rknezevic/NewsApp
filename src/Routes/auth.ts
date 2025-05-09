@@ -1,7 +1,7 @@
 import express from 'express';
 import { register, login } from '../Controllers/AuthController';
 import { UserValidator } from '../Validator/UserValidator';
-import { validationMiddleware } from '../BusinessLogic/validationMiddleware';
+import { validationMiddleware } from '../middleware/validationMiddleware';
 
 const router = express.Router();
 

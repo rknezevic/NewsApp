@@ -5,7 +5,7 @@ import { BadRequestError, ForbiddenError, NotFoundError } from '../ResponseHandl
 import { AuthenticatedRequest } from '../Types/AuthenticatedRequest';
 import { BreakingNewsExpirationTime, allowedFields } from '../Utilities/Constants/AppConstants';
 import * as NewsPostRepository from '../Repository/NewsPostRepository'
-import { okResponse } from '../ResponseHandle/SuccessHandler';
+import { NoContentResponse, okResponse } from '../ResponseHandle/SuccessHandler';
 import { INewsPostUpdate } from '../Types/INewsPostUpdate';
 
 export const DeleteNewsPost = async (req: Request<{ id: string }>, res: Response, next: NextFunction):Promise<any> => {
@@ -16,7 +16,7 @@ export const DeleteNewsPost = async (req: Request<{ id: string }>, res: Response
     if (!deleteNews) {
       throw new NotFoundError(Message.NEWS.NOT_FOUND);
     }
-    return okResponse(res, Message.NEWS.SUCCESS);
+    return NoContentResponse(res);
   } catch (error) {
     console.error(error);
     return next(error);
@@ -105,8 +105,6 @@ export const GetNewsPostForFrontPage = async (req: Request, res: Response, next:
   try {
     const newsPosts = await NewsPostRepository.getNewsPostForFrontPage();
     if (!newsPosts) throw new NotFoundError(Message.NEWS.NOT_FOUND);
-    console.log(newsPosts);
-
     return okResponse(res, newsPosts);
   } catch (error) {
     return next(error);
