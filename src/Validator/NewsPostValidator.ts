@@ -39,26 +39,31 @@ export const NewsPostValidator =
     updateNewsPost: [
         body("headline")
             .trim()
+            .notEmpty()
             .optional()
             .isLength({ max: 100 })
             .withMessage("Headline must be less than 100 characters"), //izdvojiti
         body("shortDescription")
             .trim()
+            .notEmpty()
             .optional()
             .isLength({ max: 200 })
             .withMessage("Short description must be less than 200 characters"),
         body("fullDescription")
             .trim()
+            .notEmpty()
             .optional()
             .isLength({ max: 5000 })
             .withMessage("Full description must be less than 5000 characters"),
         body("category")
             .trim()
+            .notEmpty()
             .optional()
             .isString()
             .withMessage("Category must be a string"),
         body("image")
             .trim()
+            .notEmpty()
             .optional()
             .isURL()
             .withMessage("Image must be a valid URL")

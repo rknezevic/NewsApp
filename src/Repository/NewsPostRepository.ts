@@ -13,9 +13,11 @@ export const deleteNewsPost = async (id: string) => {
 export const getActiveBreakingNews = async () => {
     return await NewsPost.findOne({
         isBreaking: true,
-        breakingExpiresAt: { $gt: new Date() }, //provjera ima li aktivnih breaking news-a u zadnja 2 dana
-    });
-
+        breakingExpiresAt: { $gt: new Date() },
+         //provjera ima li aktivnih breaking news-a u zadnja 2 dana
+    })
+    .populate('createdBy', 'name')
+    .populate('lastEditedBy', 'name');
 }
 
 export const updateNewsPost = async (id: string, updateData: INewsPostUpdate) => {    
@@ -51,6 +53,7 @@ export const getNewsPostForFrontPage = async () => {
         .sort({ createdAt: -1 })
         .limit(4)
         .populate('createdBy', 'name')
+        .populate('lastEditedBy', 'name')
   
       return {
         category,
@@ -59,7 +62,7 @@ export const getNewsPostForFrontPage = async () => {
     });
     const newsPosts = await Promise.all(newsByCategoryPromises);
 
-    const breakingNews = await getActiveBreakingNews();
+    const activeBreakingNews = await getActiveBreakingNews();
     const mappedNewsPosts = await Promise.all(newsPosts.map(async (item: any) => {
         return {
             category: item.category,
@@ -71,7 +74,8 @@ export const getNewsPostForFrontPage = async () => {
                 category: post.category,
                 createdBy: post.createdBy,
                 createdAt: post.createdAt,
-                updatedAt: post.updatedAt,
+                updatedAt: post?.updatedAt,
+                lastEditedBy: post?.lastEditedBy,
             })),
         };
     }));
@@ -82,6 +86,18 @@ export const getNewsPostForFrontPage = async () => {
         acc[category] = curr.posts;
         return acc;
       }, {} as Record<NewsCategory, typeof mappedNewsPosts[number]["posts"]>);
+
+      const breakingNews = activeBreakingNews ? {
+        _id: activeBreakingNews._id,
+        headline: activeBreakingNews.headline,
+        shortDescription: activeBreakingNews.shortDescription,
+        image: activeBreakingNews.image,
+        category: activeBreakingNews.category,
+        createdBy: activeBreakingNews.createdBy,
+        createdAt: activeBreakingNews.createdAt,
+        updatedAt: activeBreakingNews?.updatedAt,
+        lastEditedBy: activeBreakingNews?.lastEditedBy
+        } : null;
     return {
       ...result,
       breakingNews,
