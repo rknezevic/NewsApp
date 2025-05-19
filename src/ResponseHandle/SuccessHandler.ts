@@ -13,7 +13,7 @@ export const CreatedSuccessfully = <T = any>(res: Response, data?: T): Response 
 export const NoContentResponse = (res: Response): Response => {
     return res.status(ResponseConstants.HttpStatusCodes.NO_CONTENT).json({});
 };
-export const okResponse = <T = any>(res: Response, data?: T): Response => {
+export const okResponse = <T = any>(res: Response, data?: T):Response => {
     if (data === undefined) {
         return res.status(ResponseConstants.HttpStatusCodes.OK).json({});
     }

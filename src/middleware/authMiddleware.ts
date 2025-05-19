@@ -19,14 +19,13 @@ export const authMiddleware = async (req: AuthenticatedRequest, res: Response, n
   try {
     const decoded = jwt.verify(token, config.jwtSecret) as JwtPayload;
     const user = await UserRepository.findUserById(decoded.id);
-    console.log(user);
     if (!user) {
       throw new AuthorizationError(Message.USER.NOT_FOUND);
     }
-    req.user = user; 
+    req.user = user;
     next();
   } catch (error) {
-    return next(error);
+    return next(new AuthorizationError(Message.AUTH.INVALID_TOKEN));
   }
 };
 

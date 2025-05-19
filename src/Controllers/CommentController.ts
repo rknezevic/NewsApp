@@ -53,12 +53,9 @@ export const AddComment = async (req: AuthenticatedRequest, res: Response, next:
     if (!newsPost) {
       throw new NotFoundError(Message.NEWS.NOT_FOUND);
     }
-    console.log(user?.id);
-    console.log(user?.name);
     const newComment = await Comment.create({
-        author : user?.name || UserRole.Guest,
+        userId : user?._id,
         comment : req.body.comment,
-        userId : user?.id,
     });
     if (!newComment) {
         return next(new BadRequestError(Message.NEWS.COMMENT_FAILED));

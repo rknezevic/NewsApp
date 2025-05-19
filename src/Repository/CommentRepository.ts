@@ -1,4 +1,4 @@
-import { IComment } from "../Model/Comment";
+import { commentSchema, IComment } from "../Model/Comment";
 import NewsPost from "../Model/NewsPost";
 
 export const addComment = async (postId: string, newComment: IComment) => {
@@ -9,9 +9,10 @@ export const addComment = async (postId: string, newComment: IComment) => {
 }
 
 export const getComments = async (postId: string) => {
-    const newsPost = await NewsPost.findById(postId);
-    const comments = newsPost?.comment;
-    return comments;
+    const newsPost = await NewsPost.findById(postId)
+    .populate('comment.userId', 'name');
+
+    return newsPost?.comment;
 }
 
 

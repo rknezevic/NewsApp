@@ -55,7 +55,6 @@ export const GetSingleNewsPost = async (req: Request, res: Response, next: NextF
 
   try {
     const newsPost = await NewsPostRepository.getSingleNewsPost(id, true);
-
     if (!newsPost) throw new NotFoundError(Message.NEWS.NOT_FOUND);
 
     return okResponse(res, newsPost);
@@ -68,7 +67,7 @@ export const CreateNewsPost = async (req: AuthenticatedRequest, res: Response, n
   const { headline, shortDescription, fullDescription, image, category } = req.body;
   let isBreaking = req.body.isBreaking;
   try {
-    //novi postaje breaking, stara vijest se brise -----
+    //novi postaje breaking, stara vijest se brise
     if (isBreaking) {
       const activeBreakingNews = await NewsPostRepository.getActiveBreakingNews();
       if (activeBreakingNews) {
@@ -100,7 +99,7 @@ export const CreateNewsPost = async (req: AuthenticatedRequest, res: Response, n
   }
 };
 
-export const GetNewsPostForFrontPage = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+export const GetNewsPostForFrontPage = async (req: Request, res: Response, next: NextFunction):Promise<any> => {
 
   try {
     const newsPosts = await NewsPostRepository.getNewsPostForFrontPage();

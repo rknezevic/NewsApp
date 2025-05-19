@@ -1,12 +1,8 @@
 import NewsPost from "../Model/NewsPost";
 import { INewsPost } from "../Model/NewsPost";
-import { Message } from "../Utilities/Message";
 import { INewsPostUpdate } from "../Types/INewsPostUpdate";
-import { NotFoundError, InternalError, BadRequestError } from "../ResponseHandle/ErrorHandler";
-import { INewsPostFrontPage } from "../Types/INewsPostFrontPage";
 import { NewsCategory } from "../Utilities/Enums/NewsCategory";
 import { mongoErrorHandler } from "../middleware/mongoErrorHandler";
-import * as UserRepository from "./UserRepository";
 
 
 export const deleteNewsPost = async (id: string) => {
@@ -54,6 +50,7 @@ export const getNewsPostForFrontPage = async () => {
       const posts = await NewsPost.find({ category, isBreaking: false })
         .sort({ createdAt: -1 })
         .limit(4)
+        .populate('createdBy', 'name')
   
       return {
         category,
@@ -63,26 +60,22 @@ export const getNewsPostForFrontPage = async () => {
     const newsPosts = await Promise.all(newsByCategoryPromises);
 
     const breakingNews = await getActiveBreakingNews();
-    
     const mappedNewsPosts = await Promise.all(newsPosts.map(async (item: any) => {
-        const postsWithUserName = await Promise.all(item.posts.map(async (post: INewsPostFrontPage) => {
-            const user = await UserRepository.findUserById(post.createdBy);
-            return {
+        return {
+            category: item.category,
+            posts: item.posts.map((post: INewsPost) => ({
                 _id: post._id,
                 headline: post.headline,
                 shortDescription: post.shortDescription,
                 image: post.image,
                 category: post.category,
-                createdBy: user?.name,
+                createdBy: post.createdBy,
                 createdAt: post.createdAt,
                 updatedAt: post.updatedAt,
-            };
-        }));
-        return {
-            category: item.category,
-            posts: postsWithUserName,
+            })),
         };
     }));
+
     //transformacija mapiranih vrijesti u jedan objekt s kategorijama kao kljucevima i postovima kao vrijednostima
     const result = mappedNewsPosts.reduce((acc, curr, index) => {
         const category = categories[index]; 
