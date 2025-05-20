@@ -6,13 +6,13 @@ export interface IExternalNewsPost extends mongoose.Document {
         id?: string,
         name: string; 
     }
-    headline: string;
-    shortDescription: string;
-    fullDescription: string;
-    image: string;
-    createdBy: string;
+    title: string;
+    description: string;
+    content: string;
+    urlToImage: string;
+    author: string;
     lastEditedBy?: string;
-    createdAt?: Date;
+    publishedAt?: Date;
     updatedAt?: Date;
 }
 
@@ -26,25 +26,25 @@ export const externalNewsPostSchema: mongoose.Schema<IExternalNewsPost> = new mo
                 type: String,
             },
         },
-        headline: {
+        title: {
             type: String,
         },
-        shortDescription: {
+        description: {
             type: String,
         },
-        fullDescription: {
+        content: {
             type: String,
         },
-        image: {
+        urlToImage: {
             type: String,
         },
-        createdBy: {
+        author: {
             type: String,
         },
         lastEditedBy: {
             type: String,
         },
-        createdAt: {
+        publishedAt: {
             type: Date,
         },
     }

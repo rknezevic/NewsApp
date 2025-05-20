@@ -110,12 +110,11 @@ export const GetNewsPostForFrontPage = async (req: AuthenticatedRequest, res: Re
   }
 }
 
-export const SaveExternalNewsPost = async (req: AuthenticatedRequest, res: Response, next: NextFunction):Promise<any> => {
+export const SaveExternalNewsPost = async () => {
   try {
     const newsPosts = await NewsPostRepository.fetchAndSaveExternalNewsPosts();
     if (!newsPosts) throw new NotFoundError(Message.NEWS.NOT_FOUND);
-    return okResponse(res, newsPosts);
   } catch (error) {
-    return next(error);
+    throw new BadRequestError(Message.GENERAL.SERVER_ERROR);
   }
 }

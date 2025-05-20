@@ -4,6 +4,8 @@ import { CreateNewsPost, DeleteNewsPost, SaveExternalNewsPost, GetNewsPostForFro
 import { UserRole } from '../Utilities/Enums/UserRole';
 import { NewsPostValidator } from '../Validator/NewsPostValidator';
 import { validationMiddleware } from '../middleware/validationMiddleware';
+import cron from 'node-cron';
+import { config } from '../config/config';
 
 const router = express.Router();
 
@@ -12,6 +14,9 @@ router.delete('/delete/:id', authMiddleware, permissionCheck(UserRole.Admin), De
 router.patch('/update/:id', authMiddleware, permissionCheck(UserRole.Editor, UserRole.Admin), NewsPostValidator.updateNewsPost, validationMiddleware, UpdateNewsPost )
 router.get('/:id' , authMiddleware, GetSingleNewsPost);
 router.get('/front-page/display', authMiddleware, GetNewsPostForFrontPage);
-router.post('/external-news/save', authMiddleware, permissionCheck(UserRole.Admin), SaveExternalNewsPost);
+
+cron.schedule(config.cronSchedule, async () => { //cron job to run every 16 hours
+    await SaveExternalNewsPost();
+  });
 
 export default router;

@@ -5,7 +5,7 @@ import { NewsCategory } from "../Utilities/Enums/NewsCategory";
 import { mongoErrorHandler } from "../middleware/mongoErrorHandler";
 import axios from "axios";
 import { config } from "../config/config";
-import ExternalNewsPost from "../Model/ExternalNewsPost";
+import ExternalNewsPost, { IExternalNewsPost } from "../Model/ExternalNewsPost";
 
 export const deleteNewsPost = async (id: string) => {
     const newsPost = await NewsPost.findByIdAndDelete(id);
@@ -115,20 +115,19 @@ export const fetchAndSaveExternalNewsPosts = async () => {
         const response = await axios.get(config.apiUrl);
         const articles = response.data.articles;
 
-        const externalNewsPost = articles.map((article: any) => ({
+        const externalNewsPost = articles.map((article: IExternalNewsPost) => ({
             source: {
                 id: article.source.id,
                 name: article.source.name,
             },
-            headline: article.title,
+            title: article.title,
             author: article.author,
-            shortDescription: article.description,
-            image: article.urlToImage,
-            createdAt: new Date(article.publishedAt),
-            fullDescription: article.content,
-            lastEditedBy: article.author,
-            createdBy: article.author,
-        })); 
+            description: article.description,
+            urlToImage: article.urlToImage,
+            publishedAt: article.publishedAt,
+            content: article.content,
+            lastEditedBy: article.author
+        }));
         const insertedNewsPost = ExternalNewsPost.insertMany(externalNewsPost);
         return insertedNewsPost;
     } catch (error) {
