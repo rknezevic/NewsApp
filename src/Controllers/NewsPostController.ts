@@ -99,10 +99,20 @@ export const CreateNewsPost = async (req: AuthenticatedRequest, res: Response, n
   }
 };
 
-export const GetNewsPostForFrontPage = async (req: Request, res: Response, next: NextFunction):Promise<any> => {
+export const GetNewsPostForFrontPage = async (req: AuthenticatedRequest, res: Response, next: NextFunction):Promise<any> => {
 
   try {
     const newsPosts = await NewsPostRepository.getNewsPostForFrontPage();
+    if (!newsPosts) throw new NotFoundError(Message.NEWS.NOT_FOUND);
+    return okResponse(res, newsPosts);
+  } catch (error) {
+    return next(error);
+  }
+}
+
+export const SaveExternalNewsPost = async (req: AuthenticatedRequest, res: Response, next: NextFunction):Promise<any> => {
+  try {
+    const newsPosts = await NewsPostRepository.fetchAndSaveExternalNewsPosts();
     if (!newsPosts) throw new NotFoundError(Message.NEWS.NOT_FOUND);
     return okResponse(res, newsPosts);
   } catch (error) {
