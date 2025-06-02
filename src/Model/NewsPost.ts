@@ -52,7 +52,7 @@ export const newsPostSchema: Schema<INewsPost> = new Schema(
       expires: TwoDaysInSeconds,
     },
     createdBy: {
-      type: Schema.Types.Mixed,
+      type: Schema.Types.ObjectId,
       ref: 'User',
       required: true,
     },

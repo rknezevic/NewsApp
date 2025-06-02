@@ -65,31 +65,7 @@ export const getNewsPostForFrontPage = async () => {
         const newsPosts = await Promise.all(newsByCategoryPromises);
 
         const activeBreakingNews = await getActiveBreakingNews();
-        const mappedNewsPosts = await Promise.all(newsPosts.map(async (item: any) => {
-            return {
-                category: item.category,
-                posts: item.posts.map((post: INewsPost) => ({
-                    _id: post._id,
-                    headline: post.headline,
-                    shortDescription: post.shortDescription,
-                    image: post.image,
-                    category: post.category,
-                    createdBy: post.createdBy,
-                    createdAt: post.createdAt,
-                    updatedAt: post?.updatedAt,
-                    lastEditedBy: post?.lastEditedBy,
-                })),
-            };
-        }));
-
-        //transformacija mapiranih vrijesti u jedan objekt s kategorijama kao kljucevima i postovima kao vrijednostima
-        const result = mappedNewsPosts.reduce((acc, curr, index) => {
-            const category = categories[index];
-            acc[category] = curr.posts;
-            return acc;
-        }, {} as Record<NewsCategory, typeof mappedNewsPosts[number]["posts"]>);
-
-        const breakingNews = activeBreakingNews ? {
+        const breakingNews = activeBreakingNews ? {//nepotrebno, popraviti
             _id: activeBreakingNews._id,
             headline: activeBreakingNews.headline,
             shortDescription: activeBreakingNews.shortDescription,
@@ -101,7 +77,7 @@ export const getNewsPostForFrontPage = async () => {
             lastEditedBy: activeBreakingNews?.lastEditedBy
         } : null;
         return {
-            ...result,
+            newsPosts,
             breakingNews,
         };
     }
@@ -113,9 +89,10 @@ export const getNewsPostForFrontPage = async () => {
 export const fetchAndSaveExternalNewsPosts = async () => {
     try {
         const response = await axios.get(config.apiUrl);
+        //axios u controller
         const articles = response.data.articles;
 
-        const externalNewsPost = articles.map((article: IExternalNewsPost) => ({
+        const externalNewsPost = articles.map((article: IExternalNewsPost) => ({ //u drugi file
             source: {
                 id: article.source.id,
                 name: article.source.name,
