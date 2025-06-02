@@ -137,3 +137,7 @@ dist
 
 
 .DS_Store
+
+backend/node_modules/
+
+backend/.env
