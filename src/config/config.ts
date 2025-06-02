@@ -14,5 +14,8 @@ export const config = {
   mongoUri: getEnvVariable('MONGO_URI'),
   port: getEnvVariable('PORT'),
   jwtSecret: getEnvVariable('JWT_SECRET'),
+  externalNewsApiKey: getEnvVariable('EXTERNAL_NEWS_API_KEY'),
+  apiUrl: getEnvVariable('API_URL'),
+  cronSchedule: getEnvVariable('CRON_SCHEDULE'),
 };
 

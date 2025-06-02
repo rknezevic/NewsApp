@@ -1,6 +1,6 @@
 import express from 'express';
 import { authMiddleware, permissionCheck } from '../middleware/authMiddleware';
-import { CreateNewsPost, DeleteNewsPost, GetNewsPostForFrontPage, GetSingleNewsPost, UpdateNewsPost } from '../Controllers/NewsPostController';
+import { CreateNewsPost, DeleteNewsPost, SaveExternalNewsPost, GetNewsPostForFrontPage, GetSingleNewsPost, UpdateNewsPost } from '../Controllers/NewsPostController';
 import { UserRole } from '../Utilities/Enums/UserRole';
 import { NewsPostValidator } from '../Validator/NewsPostValidator';
 import { validationMiddleware } from '../middleware/validationMiddleware';

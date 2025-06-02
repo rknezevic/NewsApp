@@ -1,6 +1,6 @@
 import mongoose, { Document, Schema, Types } from 'mongoose';
 import { NewsCategory } from '../Utilities/Enums/NewsCategory';
-import {  TwoDaysInSeconds } from '../Utilities/Constants/AppConstants';
+import { TwoDaysInSeconds } from '../Utilities/Constants/AppConstants';
 import { Comment, IComment } from './Comment';
 
 export interface INewsPost extends Document {
@@ -19,7 +19,7 @@ export interface INewsPost extends Document {
   comment?: IComment[];
 }
 
-const newsPostSchema: Schema<INewsPost> = new Schema(
+export const newsPostSchema: Schema<INewsPost> = new Schema(
   {
     headline: {
       type: String,
@@ -40,8 +40,7 @@ const newsPostSchema: Schema<INewsPost> = new Schema(
     },
     category: {
       type: String,
-      enum: NewsCategory,
-      required: true,
+      enum: NewsCategory
     },
     isBreaking: {
       type: Boolean,
