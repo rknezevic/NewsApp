@@ -8,6 +8,7 @@ import { UserRole } from '../Utilities/Enums/UserRole';
 import { ResponseConstants } from '../Utilities/Constants/ResponseConstants';
 import { okResponse } from '../ResponseHandle/SuccessHandler';
 import { signToken } from '../Utilities/Functions/SignToken';
+import { config } from 'dotenv';
 
 export const register = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
   const { name, email, password, alias, role } = req.body;
@@ -56,7 +57,13 @@ export const login = async (req: Request, res: Response, next: NextFunction): Pr
       throw new BadRequestError(Message.AUTH.LOGIN_FAILED)
     }
     const token = signToken(user);
-    return okResponse(res, {token});
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 1000 * 60 * 60 * 2, // 2h
+    })
+    return okResponse(res, { token });
   } catch (error) {
     console.error(error);
     return next(error);
