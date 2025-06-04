@@ -9,6 +9,8 @@ export const verifySession = cache(async () => {
     const cookieStore = await cookies();
     const token = cookieStore.get('session')?.value;
 
+    console.log('Verifying session with token:', token);
+
     if (!token) {
         redirect('/signin');
     }
