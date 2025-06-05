@@ -14,9 +14,11 @@ export const SignupFormSchema = z.object({
     .string()
     .min(2, { message: 'Alias must be at least 2 characters long.' })
     .trim(),
-  role: z.enum(['user', 'editor'], {
-    message: 'Role can be either "user" or "editor".',
-  }),
+  role: z
+    .enum(['user', 'editor', 'guest'], {
+      message: 'Role can be either "user" or "editor".',
+    })
+    .default('guest'),
 })
 
 export type SignupFormData = z.infer<typeof SignupFormSchema>

@@ -1,41 +1,54 @@
 'use client'
 
-import { signin } from '@/app/actions/signin'
+import { useMutation } from '@tanstack/react-query'
+import { loginUser } from '../../src/app/actions/signin'
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { SigninFormData } from '../../lib/definitions/signinSchema'
 import Link from 'next/link'
-import { useActionState } from 'react'
 
 export default function SigninForm() {
-  const [state, action, pending] = useActionState(signin, undefined)
+  const router = useRouter()
+  const [form, setForm] = useState<SigninFormData>({
+  email: '',
+  password: '',
+})
+
+  const mutation = useMutation({
+    mutationFn: loginUser,
+    onSuccess: () => {
+      router.push('/front-page') 
+    },
+    onError: (err: any) => {
+      alert(err.message)
+    }
+  })
 
   return (
-    <form action={action} className="space-y-4 max-w-md">
-      <div>
-        <label htmlFor="email">Email</label>
-        <input id="email" name="email" type="email" placeholder="Email" />
-        {state?.errors?.email && <p className="text-red-500">{state.errors.email[0]}</p>}
-      </div>
-
-      <div>
-        <label htmlFor="password">Password</label>
-        <input id="password" name="password" type="password" />
-        {state?.errors?.password && (
-          <ul className="text-red-500">
-            {state.errors.password.map((err) => <li key={err}>- {err}</li>)}
-          </ul>
-        )}
-      </div>
-
-      <button type="submit" disabled={pending} className="bg-blue-600 text-white px-4 py-2">
-        {pending ? 'Submitting...' : 'Sign In'}
+    <form onSubmit={(e) => {
+      e.preventDefault()
+      mutation.mutate(form)
+    }}>
+      <input
+        type="email"
+        value={form.email}
+        onChange={(e) => setForm({ ...form, email: e.target.value })}
+        placeholder="Email"
+      />
+      <input
+        type="password"
+        value={form.password}
+        onChange={(e) => setForm({ ...form, password: e.target.value })}
+        placeholder="Password"
+      />
+      <button type="submit" disabled={mutation.isPending}>
+        {mutation.isPending ? 'Signing in...' : 'Login'}
       </button>
-
-      <p className="mt-4 text-sm">
-        New here?{' '}
-        <Link href="/signup" className="text-blue-600 underline">
-          Go to register!
-        </Link>
-      </p>
-      {state?.message && <p className="text-red-500">{state.message}</p>}
+      {mutation.error && <p className="text-red-500">{mutation.error.message}</p>}
+      <Link href="/signup" className="text-blue-500 hover:underline">
+        Dont have an accout? Register here!
+      </Link>
     </form>
+    
   )
 }
