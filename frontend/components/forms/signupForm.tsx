@@ -1,60 +1,103 @@
 'use client'
 
-import { signup } from '@/app/actions/signup'
+import { registerUser } from '@/app/actions/signup'
 import Link from 'next/link'
-import { useActionState } from 'react'
+import { useRouter } from 'next/navigation'
+import {  useState } from 'react'
+import { SignupFormData } from '../../lib/definitions/signupSchema'
+import { useMutation } from '@tanstack/react-query'
 
 export default function SignupForm() {
-  const [state, action, pending] = useActionState(signup, undefined)
+  const router = useRouter()
+  const [form, setForm] = useState<SignupFormData>({
+    name: '',
+    email: '',
+    password: '',
+    alias: '',
+    role: 'guest',
+  })
 
+  const mutation = useMutation({
+    mutationFn: registerUser,
+    onSuccess: (data) => {
+      if (data.success) {
+        router.push('/signin') 
+      } else {
+        alert(data.message || 'Registration failed')
+      }
+    }
+  })
+  
   return (
-    <form action={action} className="space-y-4 max-w-md">
-      <div>
-        <label htmlFor="name">Name</label>
-        <input id="name" name="name" placeholder="Name" />
-        {state?.errors?.name && <p className="text-red-500">{state.errors.name[0]}</p>}
-      </div>
-
-      <div>
-        <label htmlFor="email">Email</label>
-        <input id="email" name="email" type="email" placeholder="Email" />
-        {state?.errors?.email && <p className="text-red-500">{state.errors.email[0]}</p>}
-      </div>
-
-      <div>
-        <label htmlFor="password">Password</label>
-        <input id="password" name="password" type="password" />
-        {state?.errors?.password && (
-          <ul className="text-red-500">
-            {state.errors.password.map((err) => <li key={err}>- {err}</li>)}
-          </ul>
-        )}
-      </div>
-
-      <div>
-        <label htmlFor="alias">Alias</label>
-        <input id="alias" name="alias" placeholder="Alias" />
-        {state?.errors?.alias && <p className="text-red-500">{state.errors.alias[0]}</p>}
-      </div>
-
-      <div>
-        <label htmlFor="role">Role</label>
-        <input id="role" name="role" placeholder="Role (optional)" />
-        {state?.errors?.role && <p className="text-red-500">{state.errors.role[0]}</p>}
-      </div>
-
-      <button type="submit" disabled={pending} className="bg-blue-600 text-white px-4 py-2">
-        {pending ? 'Submitting...' : 'Sign Up'}
+    <form onSubmit={(e) => {
+      e.preventDefault()
+      mutation.mutate(form)
+    }}>
+      <input
+        type="email"
+        value={form.email}
+        onChange={(e) => setForm({ ...form, email: e.target.value })}
+        placeholder="Email"
+      />
+      <input
+        type="password"
+        value={form.password}
+        onChange={(e) => setForm({ ...form, password: e.target.value })}
+        placeholder="Password"
+      />
+      <input
+        type="text"
+        value={form.name}
+        onChange={(e) => setForm({ ...form, name: e.target.value })}
+        placeholder="Name"
+      />
+      <input
+        type="text"
+        value={form.alias}
+        onChange={(e) => setForm({ ...form, alias: e.target.value })}
+        placeholder="Alias"
+      />
+      <select
+        value={form.role}
+        onChange={(e) => setForm({ ...form, role: e.target.value as 'editor' | 'guest' })}
+      >
+        <option value="editor">Editor</option>
+        <option value="guest">Guest</option>
+      </select>
+      
+      <button type="submit" disabled={mutation.isPending}>
+        {mutation.isPending ? 'Registration in process...' : 'Register'}
       </button>
-
-      <p className="mt-4 text-sm">
-        Already have an account?{' '}
-        <Link href="/signin" className="text-blue-600 underline">
-          Login here!
-        </Link>
-      </p>
-
-      {state?.message && <p className="text-red-500">{state.message}</p>}
+      {mutation.error && <p className="text-red-500">{mutation.error.message}</p>}
+      <Link href="/signin" className="text-blue-500 hover:underline">
+        Already have an account? Sign in
+      </Link>
     </form>
   )
 }
+/*'
+  return (
+    <form onSubmit={(e) => {
+      e.preventDefault()
+      mutation.mutate(form)
+    }}>
+      <input
+        type="email"
+        value={form.email}
+        onChange={(e) => setForm({ ...form, email: e.target.value })}
+        placeholder="Email"
+      />
+      <input
+        type="password"
+        value={form.password}
+        onChange={(e) => setForm({ ...form, password: e.target.value })}
+        placeholder="Password"
+      />
+      <button type="submit" disabled={mutation.isPending}>
+        {mutation.isPending ? 'Signing in...' : 'Login'}
+      </button>
+      {mutation.error && <p className="text-red-500">{mutation.error.message}</p>}
+    </form>
+  )
+}
+ */
