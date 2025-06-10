@@ -9,17 +9,16 @@ export const verifySession = cache(async () => {
     const cookieStore = await cookies();
     const token = cookieStore.get('session')?.value;
 
-    console.log('Verifying session with token:', token);
-
     if (!token) {
         redirect('/signin');
     }
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as { id: string, role: string };
-        if(!decoded){
+        if (!decoded) {
             redirect('/signin');
         }
+
         return { isAuth: true, user: decoded };
 
     } catch (err) {
