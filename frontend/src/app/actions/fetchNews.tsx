@@ -5,12 +5,14 @@ export async function fetchNews() {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+
         },
     });
     console.log('fetchNews res', res.json());
     if (!res.ok) {
         const errorData = await res.json();
-        
+
         throw new Error(errorData.message || 'Failed to fetch news');
     }
     return await res.json();

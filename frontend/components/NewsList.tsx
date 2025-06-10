@@ -17,6 +17,7 @@ export default function NewsList() {
 
   return (
     <div className="news-grid">
+      <h2 title= "Front page "></h2>
       {data.map((post: any) => (
         <Link href={`/news/${post._id}`} key={post._id}>
         <Card
