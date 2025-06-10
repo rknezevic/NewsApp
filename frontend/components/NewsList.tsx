@@ -11,14 +11,17 @@ export default function NewsList() {
     queryKey: ['news'],
     queryFn: fetchNews,
   })
+  console.log('NewsList data:', data)
 
   if (isLoading) return <p>Loading...</p>
   if (error) return <p>Failed to load news.</p>
 
+
+  //ovdje je i dalje error ali uspjesno dohvatim podatke pa cu to sutra rijesiti
   return (
     <div className="news-grid">
       <h2 title= "Front page "></h2>
-      {data.map((post: any) => (
+      {data.newsPosts.map((post: any) => (
         <Link href={`/news/${post._id}`} key={post._id}>
         <Card
           key={post._id}
@@ -31,6 +34,7 @@ export default function NewsList() {
           isBreaking={post.isBreaking}
         />
         </Link>
+      
       ))}
     </div>
   )

@@ -1,19 +1,13 @@
+'use client';
 
 export async function fetchNews() {
+    const res = await fetch('/api/front-page-news') // Now calls your own server API
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API_URL}news-post/front-page/display`, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*',
-
-        },
-    });
-    console.log('fetchNews res', res.json());
+  const data = await res.json()
+    console.log('fetchNews res', data);
     if (!res.ok) {
-        const errorData = await res.json();
-
-        throw new Error(errorData.message || 'Failed to fetch news');
+        throw new Error(data.message || 'Failed to fetch news');
     }
-    return await res.json();
+    return data;
 }
+
