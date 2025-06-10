@@ -4,6 +4,7 @@ import {config} from './config/config';
 import { errorHandler } from './middleware/errorHandler';
 import router from './Routes/router';
 import fetchAndSaveNewsJob from './jobs/cronJobs';
+import { useCors } from './middleware/useCors';
 
 const app: Application = express();
 app.use(express.json());
@@ -11,7 +12,7 @@ app.use(router);
 fetchAndSaveNewsJob;
 app.use(errorHandler)
 connectDb();
-
+useCors(app);
 const PORT = config.port || 5000;
 
 app.listen(PORT, () => {
