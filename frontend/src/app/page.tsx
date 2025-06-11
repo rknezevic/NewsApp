@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import NewsList from "../../components/NewsList";
+import NewsList from "../../components/FrontPageView/NewsList";
 import { verifySession } from "../../lib/dal";
 
 export default async function Home() {

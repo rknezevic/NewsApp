@@ -1,7 +1,7 @@
 'use server'
 
 import { cookies } from "next/headers";
-import NewsList from "../../../components/NewsList"
+import NewsList from "../../../components/FrontPageView/NewsList"
 import { verifySession } from "../../../lib/dal";
 
 export default async function FrontPage() {
