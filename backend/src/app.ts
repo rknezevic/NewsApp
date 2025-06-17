@@ -13,6 +13,8 @@ app.use(router);
 fetchAndSaveNewsJob;
 app.use(errorHandler)
 connectDb();
+useCors(app);
+
 const PORT = config.port || 5000;
 
 app.listen(PORT, () => {

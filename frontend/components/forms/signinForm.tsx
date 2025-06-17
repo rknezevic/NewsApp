@@ -17,7 +17,7 @@ export default function SigninForm() {
   const mutation = useMutation({
     mutationFn: loginUser,
     onSuccess: () => {
-      router.push('/front-page') 
+      router.push('/') 
     },
     onError: (err: any) => {
       alert(err.message)
