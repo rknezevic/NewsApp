@@ -12,8 +12,6 @@ export const verifySession = cache(async () => {
     if (!token) {
         redirect('/signin');
     }   
-
-    console.log('Verifying session with token:', token);
     
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as { id: string, role: string };

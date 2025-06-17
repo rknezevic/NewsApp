@@ -1,12 +1,12 @@
 'use server'
-import {  SigninFormData } from "../../../lib/definitions/signinSchema"
-import { createSession } from "../../../lib/session"
 
+import {  SigninFormData } from "../../lib/definitions/signinSchema"
+import { createSession } from "../../lib/session"
 export async function loginUser(data: SigninFormData) {
 
   const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API_URL}auth/login`, {
     method: 'POST',
-    headers: {
+    headers: { 
       'Content-Type': 'application/json',
     },
     credentials: 'include', //cookies

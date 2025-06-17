@@ -1,5 +1,5 @@
 'use server'
-import { SignupFormData } from '../../../lib/definitions/signupSchema'
+import { SignupFormData } from '../../lib/definitions/signupSchema'
 
 export async function registerUser(formData: SignupFormData) {
   const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API_URL}auth/register`, {
