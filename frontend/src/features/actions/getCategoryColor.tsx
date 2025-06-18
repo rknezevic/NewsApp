@@ -1,13 +1,12 @@
-import styles from '../../components/card/newsPostCard.module.css';
 
 const categoryColorMap : {[key: string]: string} = {
-  sport: styles.sportColor,
-  local: styles.localColor,
-  economy: styles.economyColor,
-  entertainment: styles.entertainmentColor,
-  weather: styles.weatherColor,
-  worldwide: styles.worldwideColor,
+  sport: 'sportColor',
+  local: 'localColor',
+  economy: 'economyColor',
+  entertainment: 'entertainmentColor',
+  weather: 'weatherColor',
+  worldwide: 'worldwideColor',
 };
-export function getCategoryColor(category: string): string {    
+export function getCategoryColor(category: string): string { 
   return categoryColorMap[category];
 }       

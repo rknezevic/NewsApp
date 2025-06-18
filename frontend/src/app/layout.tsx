@@ -1,6 +1,7 @@
 import "./globals.css";
 import QueryProvider from "../features/QueryProvider";
 import {Navbar} from "../components/Navbar/Navbar";
+import { Header } from "@/components/Header/Header";
 
 export default function RootLayout({
   children,
@@ -11,7 +12,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <QueryProvider>
-          <Navbar />
+          <Header />
           <main>{children}</main>
         </QueryProvider>
       </body>

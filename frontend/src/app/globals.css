@@ -40,3 +40,35 @@ a {
     color-scheme: dark;
   }
 }
+
+.sportColor {
+  color: #e0f7fa;
+  background-color: #229c91;
+}
+
+.localColor {
+  color: #fff3e0;
+  background-color: #60d532;
+}
+
+.worldwideColor {
+  color: #fce4ec;
+  background-color: #120b0e;
+}
+.economyColor {
+  color: #e8f5e9;
+  background-color: #85a015;
+}
+.entertainmentColor {
+  color: #f3e5f5;
+  background-color: #9c27b0;
+}
+.weatherColor {
+  color: #e3f2fd;
+  background-color: #2196f3;
+}
+
+.defaultColor {
+  color: #e0e0e0;
+  background-color: #424242;
+}
