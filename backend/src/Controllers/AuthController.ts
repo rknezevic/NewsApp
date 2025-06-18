@@ -70,3 +70,17 @@ export const login = async (req: Request, res: Response, next: NextFunction): Pr
   }
 };
 
+export const logout = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
+  try {
+    res.clearCookie('token', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+    });
+    return okResponse(res, ResponseConstants.SuccessTypes.OK);
+  } catch (error) {
+    console.error(error);
+    return next(error);
+  }
+}
+
