@@ -1,8 +1,8 @@
 import Link from "next/link";
-import { NewsPostType } from "../types/NewsPost";
+import { NewsPostType } from "../../types/NewsPost";
 import styles from '../FrontPageView/NewsList.module.css';
 import Card from "../card/newsPostCard";
-import { NewsPostComponentProps } from "../types/NewsPostComponentProps";
+import { NewsPostComponentProps } from "../../types/NewsPostComponentProps"
 
 export default function NewsPostComponent({ group }: NewsPostComponentProps) {
   return (

@@ -1,6 +1,6 @@
 import "./globals.css";
 import QueryProvider from "../features/QueryProvider";
-import Navbar from "../components/Navbar/Navbar";
+import {Navbar} from "../components/Navbar/Navbar";
 
 export default function RootLayout({
   children,

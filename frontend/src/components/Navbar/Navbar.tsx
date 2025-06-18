@@ -1,49 +1,23 @@
 import Link from "next/link";
+import styles from "./Navbar.module.css";
+import { categories } from "@/features/CategoriesNavbar";
+import { getCategoryColor } from "@/features/actions/getCategoryColor";
 
-const Navbar = () => {
+export const Navbar = () => {
   return (
-    <nav className="navbar">
-      <div className="navbar-brand">
-        <a href="/">MyApp</a>
-      </div>
-      <ul className="navbar-menu">
-        <li>
-            <Link href="/home">
-            <p>Home</p>
+    <nav className={styles.navbar}>
+      <ul className={styles.navList}>
+        {categories.map((category) => (
+          <li
+            key={category.slug}
+            className={styles.navItem}
+          >
+            <Link href={category.slug}>
+              <p>{category.name}</p>
             </Link>
-        </li>
-        <li>
-            <Link href="/worldwide">
-            <p>Worldwide</p>
-            </Link>
-        </li>
-        <li>
-            <Link href="/local">
-            <p>Local</p>
-            </Link>
-        </li>
-        <li>
-            <Link href="/sport">
-            <p>Sport</p>
-            </Link>
-        </li>
-        <li>
-            <Link href="/economy">
-            <p>Economy</p>
-            </Link>
-        </li>
-        <li>
-            <Link href="/entertainment">
-            <p>Entertainment</p>
-            </Link>
-        </li>
-        <li>
-            <Link href="/weather">
-            <p>Weather</p>
-            </Link>
-        </li>
+          </li>
+        ))}
       </ul>
     </nav>
   );
 }
-export default Navbar;

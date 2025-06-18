@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query'
 import { fetchNews } from '../../features/actions/fetchNews'
 import BreakingNewsComponent from '../BreakingNewsComponent/breakingNewsPost'
 import NewsPostComponent from '../NewsPostComponent/newsPost'
-import { CategoryGroupType } from '../types/CategoryGroup'
+import { CategoryGroupType } from '../../types/CategoryGroup'
 
 export default function NewsList() {
   const { data, isLoading, error } = useQuery({

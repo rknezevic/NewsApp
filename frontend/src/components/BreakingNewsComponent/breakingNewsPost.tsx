@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import styles from './breakingNewsPost.module.css'
 import Card from '../card/newsPostCard'
-import { BreakingNewsType } from '../types/BreakingNewsPost'
+import { BreakingNewsType } from '../../types/BreakingNewsPost'
 
 
 export default function BreakingNewsComponent(data: BreakingNewsType){

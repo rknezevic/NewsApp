@@ -1,7 +1,6 @@
-// components/Card.tsx
 import styles from './newsPostCard.module.css';
 import formatDate from '../../lib/dateFormatter';
-import { CardProps } from '../types/CardProps';
+import { CardProps } from '../../types/CardProps';
 import { getCategoryColor } from '@/features/actions/getCategoryColor';
 
 export default function Card({
