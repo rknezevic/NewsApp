@@ -21,17 +21,19 @@ export default function SigninForm() {
     onSuccess: () => {
       router.push('/')
     },
-    onError: (err: any) => {
-      alert(err.message)
+    onError: (err) => {
+      return err;
     }
   })
 
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    mutation.mutate(form);
+  };
+
   return (
     <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        mutation.mutate(form);
-      }}
+      onSubmit= {handleSubmit}
       className={styles.formContainer}
     >
       <h2 className={styles.heading}>LOGIN</h2>
@@ -72,11 +74,10 @@ export default function SigninForm() {
         <p className={styles.errorText}>{mutation.error.message}</p>
       )}
 
-      <a href="/signup" className={styles.link}>
+      <Link href="/signup" className={styles.link}>
         Don’t have an account? Register here!
-      </a>
+      </Link>
     </form>
 
   )
 }
-/* */

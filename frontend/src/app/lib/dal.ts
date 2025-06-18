@@ -22,6 +22,7 @@ export const verifySession = cache(async () => {
         return { isAuth: true, user: decoded };
 
     } catch (err) {
+        cookieStore.delete('session')
         console.error('Session verification failed:', err);
         redirect('/signin');
     }

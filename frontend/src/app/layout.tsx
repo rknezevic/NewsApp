@@ -8,11 +8,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <main>
+      <body>
+        <main>
           <QueryProvider>
             {children}
-            </QueryProvider>
-      </main>
+          </QueryProvider>
+        </main>
+      </body>
     </html>
   );
 }

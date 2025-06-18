@@ -7,7 +7,8 @@ const categoryColorMap : {[key: string]: string} = {
   entertainment: styles.entertainmentColor,
   weather: styles.weatherColor,
   worldwide: styles.worldwideColor,
+  default: styles.defaultColor
 };
 export function getCategoryColor(category: string): string {    
-  return categoryColorMap[category];
+  return categoryColorMap[category] || categoryColorMap["default"];
 }       
