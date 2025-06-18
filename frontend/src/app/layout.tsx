@@ -1,8 +1,7 @@
 import "./globals.css";
 import QueryProvider from "../features/QueryProvider";
-import {Navbar} from "../components/Navbar/Navbar";
-import { Header } from "@/components/Header/Header";
-
+import ClientLayout from "./clientLayout";
+const noHeader = ["/signin", "signup"]
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -12,8 +11,9 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <QueryProvider>
-          <Header />
-          <main>{children}</main>
+          <main>
+            <ClientLayout>{children}</ClientLayout>
+          </main>
         </QueryProvider>
       </body>
     </html>
