@@ -1,6 +1,6 @@
 'use client'
 
-import { fetchNewsPostDetails } from "@/app/features/actions/newsPostDetails";
+import { fetchNewsPostDetails } from "@/features/actions/newsPostDetails";
 import { useQuery } from "@tanstack/react-query";
 import styles from './NewsPostDetails.module.css';
 

@@ -1,4 +1,4 @@
-import NewsPostDetails from "../../components/DetailsView/NewsPostDetails";
+import NewsPostDetails from "../../../components/DetailsView/NewsPostDetails";
 
 export default function DetailsPage( { params }: { params: { postId: string } }) {
   const postId = params.postId;

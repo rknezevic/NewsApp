@@ -2,7 +2,7 @@
 import styles from './newsPostCard.module.css';
 import formatDate from '../../lib/dateFormatter';
 import { CardProps } from '../types/CardProps';
-import { getCategoryColor } from '@/app/features/actions/getCategoryColor';
+import { getCategoryColor } from '@/features/actions/getCategoryColor';
 
 export default function Card({
   category,
