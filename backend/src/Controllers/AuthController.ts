@@ -75,7 +75,6 @@ export const logout = async (req: Request, res: Response, next: NextFunction): P
     res.clearCookie('token', {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
     });
     return okResponse(res, ResponseConstants.SuccessTypes.OK);
   } catch (error) {
