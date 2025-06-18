@@ -1,4 +1,4 @@
-import { NewsCategory } from "../components/enums/NewsCategory";
+import { NewsCategory } from "../../../enums/NewsCategory";
 
 export type NewsPostType = {
     _id : string

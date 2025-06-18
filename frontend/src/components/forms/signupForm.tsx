@@ -7,6 +7,7 @@ import { useState } from 'react'
 import { SignupFormData } from '../../lib/definitions/signupSchema'
 import { useMutation } from '@tanstack/react-query'
 import styles from './signupForm.module.css'
+import { PublisherType } from '@/enums/PublisherType'
 
 export default function SignupForm() {
   const router = useRouter()
@@ -92,10 +93,10 @@ export default function SignupForm() {
           id="role"
           className={styles.selectField}
           value={form.role}
-          onChange={(e) => setForm({ ...form, role: e.target.value as 'editor' | 'guest' })}
+          onChange={(e) => setForm({ ...form, role: e.target.value as PublisherType.Editor | PublisherType.Guest })}
         >
-          <option value="editor">Editor</option>
-          <option value="guest">Guest</option>
+          <option value="editor">{PublisherType.Editor}</option>
+          <option value="guest">{PublisherType.Guest }</option>
         </select>
 
 

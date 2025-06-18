@@ -6,7 +6,6 @@ import { NewsPostComponentProps } from "../../types/NewsPostComponentProps"
 
 export default function NewsPostComponent({ group }: NewsPostComponentProps) {
   return (
-    <>
       <div key={group.category} className={styles['category-section']}>
         <div className={styles['category-posts']}>
           {group.posts.map((post: NewsPostType) => (
@@ -24,7 +23,5 @@ export default function NewsPostComponent({ group }: NewsPostComponentProps) {
           ))}
         </div>
       </div>
-
-    </>
   );
 }
