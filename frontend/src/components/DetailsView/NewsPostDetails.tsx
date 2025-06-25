@@ -18,12 +18,16 @@ export default function NewsPostDetails({ postId }: { postId: string }) {
         return new Date(date).toLocaleDateString();
     };
 
+    const isAuthorKnown = (author: { name?: string }) => {
+        return author.name || PublisherType.Guest;
+    };
+
     return (
     <div className={styles.container}>
       <div className={styles.headerRow}>
         <h1 className={styles.headline}>{data.headline}</h1>
         <div className={styles.meta}>
-          <p>Published by {data.createdBy.name || PublisherType.Guest}</p>
+          <p>Published by {isAuthorKnown(data.createdBy)}</p>
           <p>{parsedDate(data.createdAt)}</p>
         </div>
       </div>
