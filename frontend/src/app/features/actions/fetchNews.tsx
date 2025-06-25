@@ -1,7 +1,7 @@
 'use client';
 
 export async function fetchNews() {
-    const res = await fetch('/api/front-page-news') 
+  const res = await fetch('/features/api/front-page-news') 
 
   const data = await res.json()
     if (!res.ok) {

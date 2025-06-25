@@ -12,8 +12,6 @@ export const verifySession = cache(async () => {
     if (!token) {
         redirect('/signin');
     }   
-
-    console.log('Verifying session with token:', token);
     
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as { id: string, role: string };
@@ -24,6 +22,7 @@ export const verifySession = cache(async () => {
         return { isAuth: true, user: decoded };
 
     } catch (err) {
+        cookieStore.delete('session')
         console.error('Session verification failed:', err);
         redirect('/signin');
     }

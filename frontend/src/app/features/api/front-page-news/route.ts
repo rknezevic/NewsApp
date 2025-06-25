@@ -4,7 +4,6 @@ import { NextResponse } from 'next/server'
 export async function GET() {
   const cookieStore = await cookies()
   const token = cookieStore.get('session')?.value
-  console.log('Token from cookies:', token)
 
   if (!token) {
     return NextResponse.json({ message: 'Unauthorized' }, { status: 401 })
@@ -19,7 +18,6 @@ export async function GET() {
   })
 
   const data = await res.json()
-
   if (!res.ok) {
     return NextResponse.json({ message: data.message || 'Failed to fetch' }, { status: res.status })
   }
