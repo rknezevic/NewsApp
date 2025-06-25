@@ -1,26 +1,25 @@
 import Link from 'next/link'
 import styles from './breakingNewsPost.module.css'
 import Card from '../card/newsPostCard'
-import { BreakingNewsType } from '../../types/BreakingNewsPost'
+import { NewsPostType } from '@/types/NewsPost'
 
-
-export default function BreakingNewsComponent(data: BreakingNewsType){
+export default function BreakingNewsComponent({news}: { news: NewsPostType }) {
 return (
-    data && (
+
         <div className={styles['breaking-news-section']}>
           <h1>Breaking News</h1>
-          <Link href={`/news/${data._id}`}  >
+          <Link href={`/news/${news._id}`}  >
             <Card
-              key={data._id}
-              headline={data.headline}
-              shortDescription={data.shortDescription}
-              createdAt={data.createdAt}
-              updatedAt={data.updatedAt}
-              createdBy={{ name: data.createdBy?.name || 'Unknown' }}
+              key={news._id}
+              headline={news.headline}
+              shortDescription={news.shortDescription}
+              createdAt={news.createdAt}
+              updatedAt={news.updatedAt}
+              createdBy={{ name: news.createdBy?.name || 'Unknown' }}
               isBreaking={true}
-              category={data.category}
+              category={news.category}
             />
           </Link>
         </div>
-      )
+    
 )}

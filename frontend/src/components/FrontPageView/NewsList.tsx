@@ -17,7 +17,9 @@ export default function NewsList() {
   if (error) return <p>Failed to load news.</p>
   return (
   <div className={styles['news-grid']}>
-    {data && data.breakingNews ? BreakingNewsComponent(data.breakingNews) : null}
+    {data.breakingNews && (
+      <BreakingNewsComponent news= {data.breakingNews}/>
+      )}
     <div className={styles['categories-container']}>
       {data.newsPosts
         ?.filter((group: CategoryGroupType) => group.posts.length > 0)
