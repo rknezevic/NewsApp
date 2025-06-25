@@ -65,7 +65,7 @@ export const GetSingleNewsPost = async (req: Request, res: Response, next: NextF
 
 export const CreateNewsPost = async (req: AuthenticatedRequest, res: Response, next: NextFunction):Promise<any> => {
   const { headline, shortDescription, fullDescription, image, category } = req.body;
-  let isBreaking = req.body.isBreaking;
+  const isBreaking = req.body.isBreaking === true ? req.body.isBreaking : false;
   try {
     //novi postaje breaking, stara vijest se brise
     if (isBreaking) {
