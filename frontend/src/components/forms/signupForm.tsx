@@ -8,6 +8,7 @@ import { SignupFormData } from '../../lib/definitions/signupSchema'
 import { useMutation } from '@tanstack/react-query'
 import styles from './signupForm.module.css'
 import { PublisherType } from '@/enums/PublisherType'
+import { on } from 'events'
 
 export default function SignupForm() {
   const router = useRouter()
@@ -21,23 +22,24 @@ export default function SignupForm() {
 
   const mutation = useMutation({
     mutationFn: registerUser,
-    onSuccess: (data) => {
-      if (data.success) {
-        router.push('/signin')
-      } else {
-        alert(data.message || 'Registration failed')
-      }
+    onSuccess: () => {
+      router.push('/signin')
+    },
+    onError: (err) => {
+      return err;
     }
   })
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    mutation.mutate(form)
+  }
 
   return (
     <div className={styles.formContainer}>
       <h2 className={styles.heading}>Register</h2>
       <form
-        onSubmit={(e) => {
-          e.preventDefault()
-          mutation.mutate(form)
-        }}
+        onSubmit={handleSubmit}
         className={styles.form}
       >
         <label htmlFor="email">Email</label>
@@ -96,7 +98,7 @@ export default function SignupForm() {
           onChange={(e) => setForm({ ...form, role: e.target.value as PublisherType.Editor | PublisherType.Guest })}
         >
           <option value="editor">{PublisherType.Editor}</option>
-          <option value="guest">{PublisherType.Guest }</option>
+          <option value="guest">{PublisherType.Guest}</option>
         </select>
 
 
