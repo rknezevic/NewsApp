@@ -33,7 +33,9 @@
   transition: background 0.2s ease;
 }
 
-ul li ul li ul li:hover {
+.navItem:hover{
   cursor: pointer;
-  font-weight: bold;
+  background: #f0f4ff;
+  box-shadow: 0 0 8px 2px #808ead;
+  color: #2a4365;
 }
