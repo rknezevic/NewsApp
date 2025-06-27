@@ -1,7 +1,7 @@
-import { BreakingNewsType } from "./BreakingNewsPost";
+import { NewsPostType } from "./NewsPost";
 import { CategoryGroupType } from "./CategoryGroup"
 
 export type FrontPageReturnType = {
     newsPosts: CategoryGroupType[];
-    breakingNews: BreakingNewsType
+    breakingNews: NewsPostType;
 }
