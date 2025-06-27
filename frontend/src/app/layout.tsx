@@ -4,7 +4,7 @@ import QueryProvider from "../features/QueryProvider";
 import { Header } from "@/components/Header/Header";
 import { use } from "react";
 import { usePathname } from "next/navigation";
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
