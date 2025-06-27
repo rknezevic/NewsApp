@@ -33,7 +33,7 @@ export default function NewsList({ category }: NewsListProps) {
 
   return (
     <div className={styles['news-grid']}>
-      {data.breakingNews &&
+      {category === 'front-page' && data.breakingNews &&
         <BreakingNewsComponent news={data.breakingNews} />
       }
       <div className={styles['categories-container']}>
