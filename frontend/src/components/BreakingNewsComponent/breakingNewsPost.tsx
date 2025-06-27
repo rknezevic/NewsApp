@@ -8,7 +8,7 @@ return (
 
         <div className={styles['breaking-news-section']}>
           <h1>Breaking News</h1>
-          <Link href={`/news/${news._id}`}  >
+          <Link href={`/news-post-details/${news._id}`}  >
             <Card
               key={news._id}
               headline={news.headline}
